@@ -76,10 +76,10 @@ function createOurTeamEntry(string $name, string $position, string $phoneNumber,
 
     $html = "";
     $html .= "<tr class=\"vcard\">";
-    $html .= "<td><img class=\"photo\" src=\"$portraitUrl\" alt=\"portrait of $name\"></td>";
-    $html .= "<td class=\"fn\">$name</td>";
+    $html .= "<td><a href=\"team_info.php\" ><img class=\"photo\" src=\"$portraitUrl\" alt=\"portrait of $name\"></a></td>";
+    $html .= "<td style=\"padding:.5em\" class=\"fn\">$name</td>";
     $html .= "<td>$position</td>";
-    $html .= "<td class=\"tel\"><a href=\"tel:$phoneNumber;ext=301\">$phoneNumber <abbr>Ext. $phoneNumberExt</abbr></a></td>";
+    $html .= "<td  style=\"padding:.5em\" class=\"tel\"><a href=\"tel:$phoneNumber;ext=301\">$phoneNumber <abbr>Ext. $phoneNumberExt</abbr></a></td>";
     $html .= "</tr>";
 
     return $html;
