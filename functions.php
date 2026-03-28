@@ -65,7 +65,7 @@ const currentUrlString = window.location.href;
     }
     
  /*
-    This function is activated when the accept terms button on the legal.php is clicked and
+    this function is activated when the accept terms button on the legal.php is clicked and
     displays an popup alert message to the user. When the alert message "ok" button is clicked 
     the user is then redirected to the Northern Phish & Loan's registration page
 */   

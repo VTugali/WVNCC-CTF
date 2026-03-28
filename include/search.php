@@ -8,8 +8,8 @@ include "/var/www/html/include/vulnconfig.php";
 $keyTerms = array(
     array("login", "log", "account", "sign"),
     array("create", "register", "sign", "account"),
-    array("feedback", "comment", "complain", "fourm", "contact", "message", "chat"),
-    array("about", "history", "managment", "call", "contact", "number", "address", "nixon"),
+    array("feedback", "comment", "complain", "forum", "contact", "message", "chat"),
+    array("about", "history", "managment", "call", "contact", "number", "address","team", "nixon"),
     array("download", "app"),
     array("contract", "legal", "term", "arbitration", "privacy", "agreement"),
 );
@@ -17,7 +17,7 @@ $resultingPages = array(
     array("/banking/login.php", "Log in to your account"),
     array("/banking/register.php", "Sign up for an account"),
     array("/feedback.php", "Tell us how we're doing"),
-    array("/about/our-team.php.php", "About Northern Phish &amp; Loan"),
+    array("/about/our-team.php", "About Northern Phish &amp; Loan"),
     array("https://play.google.com/store/apps/details?id=edu.wvncc.northernphish", "Download our app"),
     array("/about/legal.php", "Terms of Service")
 );
