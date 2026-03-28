@@ -5,7 +5,7 @@ services:
         image: php:8.2-apache
         restart: always
         volumes:
-            # Your copy of Break the Bank needs to in the /var/www/html folder
+        # Your copy of Break the Bank needs to in the /var/www/html folder
             # of your local machine.
             - /var/www/html:/var/www/html
             #- /var/www/html/config/apache2:/etc/apache2
@@ -13,7 +13,9 @@ services:
         ports:
             - 80:80
         container_name: www
-        
+        depends_on:
+            - ollama
+
     db:
         image: mariadb:10.11.11-jammy
         restart: always
@@ -22,3 +24,15 @@ services:
         ports:
             - 3306:3306
         container_name: db
+
+    ollama:
+        image: ollama/ollama
+        restart: always
+        ports:
+            - 11434:11434
+        container_name: ollama
+        volumes:
+            - ollama_data:/root/.ollama
+
+volumes:
+    ollama_data:
