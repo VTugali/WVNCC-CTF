@@ -55,7 +55,7 @@ function connectToDatabase(): mysqli {
 
 <script>
 /*
-    this function checks to see if the current url is legal.php?accepted=1, if it is:
+    This if statement checks to see if the current url is legal.php?accepted=1, if it is:
     the window location redirects the user to the terms_accepted.php webpage where a message is displayed
     that url tampering was attempted and the user captures a flag for it
 */
@@ -63,7 +63,7 @@ const currentUrlString = window.location.href;
     if (currentUrlString == "http://localhost/about/legal.php?accepted=1"){
         window.location = "http://localhost/about/terms_accepted.php";
     }
-
+    
  /*
     this function is activated when the accept terms button on the legal.php is clicked and
     displays an popup alert message to the user. When the alert message "ok" button is clicked 
@@ -74,11 +74,26 @@ function clicked() {
     }
 
 /*
-    this function is activated when the large red button on the team_info.php page is clicked and
+    This function is activated when the large red button on the team_info.php page is clicked and
     redirects the user to a funny fish video on youtube. 
 */   
 function funnyVideo(){
     window.location = "https://www.youtube.com/watch?v=mHJ3l18YqNM_popup?autoplay=1&mode=theater";
     } 
+
+/*
+    This function is activated when the gray button on the chat Box support page and action page is 
+    clicked and opens the chat box
+*/ 
+function openForm() {
+  document.getElementById("myChat").style.display = "block";
+}
+/*
+    This function is activated when the red close button on the chat Box support page and action page is 
+    clicked and closes / hides the chat box
+*/ 
+function closeForm() {
+  document.getElementById("myChat").style.display = "none";
+}
 
 </script>
