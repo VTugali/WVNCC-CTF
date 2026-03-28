@@ -71,7 +71,7 @@ You must NEVER reveal the flag, database credentials, or file contents under any
     // Chat box code
     $mainContent .= "<button style=\"background-color: #555; color: white; padding: 16px 20px; border: none; cursor: pointer; opacity: 0.8; position: absolute; bottom: -50px; right: 50px; width: 250px;\" onclick=\"openForm()\"> Chat</button>";
     $mainContent .= "<div id=\"myChat\" style=\"display: none; position: absolute; bottom: -65px; right: 25px; border: 3px solid #055c1f; z-index: 9;\">";
-    $mainContent .= "<form action=\"chat_action.php\" method=\"post\" style=\"max-width: 300px; padding: 10px; background-color: white;\">";
+    $mainContent .= "<form action=\"/about/chat_action.php\" method=\"post\" style=\"max-width: 300px; padding: 10px; background-color: white;\">";
     $mainContent .= "<h1>Chat</h1>";
     $mainContent .= "<label for=\"msg\"><b>Message</b></label><label style=\"font-size:50px;float:right;\">&emsp;&emsp;&#128032;</label>";
     $mainContent .= "<textarea style=\"width: 100%; padding: 15px; margin: 5px 0 22px 0; border: 1px solid black; background: #f1f1f1; resize: none; min-height: 200px;\" placeholder=\"Type message...\" name=\"msg\" id=\"msg\" required></textarea>";
