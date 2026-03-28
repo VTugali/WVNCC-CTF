@@ -91,6 +91,7 @@ function createHeaderElement(): string {
     $result .= "<li><a href=\"/about/our-team.php\">Our team</a></li>";
     $result .= "<li><a href=\"/about/locations.php\">Locations</a></li>";
     $result .= "<li><a href=\"/about/legal.php\">Legal</a></li>";
+    $result .= "<li><a href=\"/about/chat_support.php\">Chat Support</a></li>";
     $result .= "</ul>";
     $result .= "</li>";
     $result .= "</ul>";
