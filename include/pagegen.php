@@ -72,6 +72,7 @@ function createHeaderElement(): string {
         $result .= "<li><a href=\"/banking/dashboard.php\">Dashboard</a></li>";
         $result .= "<li><a href=\"/banking/mobile-deposit.php\">Mobile deposit</a></li>";
         $result .= "<li><a href=\"/banking/transfer.php\">Funds transfer</a></li>";
+        $result .= "<li><a href=\"/banking/bankTransactions.php\">Transactions</a></li>";
         $result .= "<li><a href=\"/banking/loanApplication.php\">Apply For Loan</a></li>";
         $result .= "<li><a href=\"/banking/change-password.php\">Change Password</a></li>";
         $result .= "<li><a href=\"/banking/logout.php\">Log Out</a></li>";
