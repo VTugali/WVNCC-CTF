@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS fileUploads;
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS acctBalance;
 
 /*
     CIT 291 - CIT Internship & Certification
@@ -76,9 +77,21 @@ CREATE TABLE fileUploads (
     FOREIGN KEY (transactionId) REFERENCES transactions(transactionId)
 );
 
+CREATE TABLE acctBalance(
+    transactionId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    userId INT NOT NULL, 
+    accountName VARCHAR(25) NOT NULL,
+    depositAmount DECIMAL(30, 2) NOT NULL,
+    transferAmount DECIMAL(30,2) NOT NULL,
+    checkingBalance DECIMAL(30, 2) DEFAULT 0.00,
+    savingsBalance DECIMAL(30, 2) DEFAULT 0.00,
+    FOREIGN KEY (userId) REFERENCES users(userId)
+);
+
 /* Sample data */
 INSERT INTO users (username, password, firstName, lastName, email, isAdmin) VALUES ("Admin", "1234", "Admin", "Admin", "admin@northernphish.com", True);
 INSERT INTO users (username, password, firstName, lastName, email, isAdmin) VALUES ("SeanLauritzen", "hackme", "Sean", "Lauritzen", "splauritzen@mail.wvncc.edu", True);
+INSERT INTO users (username, password, firstName, lastName, email, isAdmin) VALUES ("CoderCat","Casper735!","Charlyn", "Woodruff", "cwoodruff@aol.com", True);
 
 
 INSERT INTO accounts (userId, accountType, nickname) VALUES (1, "Checking", "NORTHERN PHISH CORPORATE");
