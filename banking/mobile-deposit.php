@@ -5,14 +5,133 @@
     FIXME: I cannot upload files larger than 1 MB or so, the page crashes
     and does not congratulate me as it should. -Sean
 */
+
 session_start();
 include "/var/www/html/include/functions.php";
+include "/var/www/html/banking/bankingFunctions.php";
 
 $mainContent = "";
 $error = "";
 $status = "";
 
+$mobileDepositForm = new SimpleForm(
+    name: "Mobile Check Deposit",
+    fields: array(
+        new SimpleFormField(
+            type: "file",
+            name: "file-to-upload",
+            accessibleName: "Select Photo",
+            errorMessage: $error,
+            isRequired: true
+        ),
+        new SimpleFormField(
+            type: "select",
+            name: "to-account",
+            accessibleName: "Receiving Account",
+            defaultValue: "",
+            options: array(
+                "checking" => "Checking", 
+                "saving" => "Saving"
+            ),
+            isRequired: true
+        ),
+        new SimpleFormField(
+            type: "text",
+            name: "amount",
+            accessibleName: "Amount",
+            isRequired: true
+        ),
+         new SimpleFormField(
+            type: "hidden",
+            name: "user_id",
+            accessibleName: "UserId",
+            isRequired: true
+        ),
+    ),
+    instructions: "Snap a picture of a check and mobile deposit it here. Once the image is processed and reviewed, the funds will be deposited into your account.",
+    method: "POST",
+    action: "/banking/mobile-deposit.php",
+    submitButtonName: "Upload Image"
+);
+
 if($_SERVER['REQUEST_METHOD'] == "POST") {
+
+    // These lines get the information from the user in the mobile deopsit form and store the value in the $variableNames
+    $mobileDepositAmt = $_POST['amount'];
+    $recAcct = $_POST['to-account'];
+    $userId = $_COOKIE["logged-in-user"];
+    $user = userFromId((int)$userId);
+    $chkingBal = getCheckingBalance($userId);
+    $savingBal = getSavingsBalance($userId);
+    
+    // This line sets the variable $database to the connectToDatabase function
+    $database = connectToDatabase();
+
+    // This if statement checks to see if the database is not connected and then sends an error message
+    // and closes the connection
+    if(!$database){
+        die ("Connection failed: " .connect->connect_error);
+    } else {
+            
+            /*This if statement will check to see if the receiving account is the checking account, if it is
+              it then takes the mobile deposit amount  and adds it to the checking account balance and stores it in
+              the new variable $newCheckingAccountBalance */
+            if ($recAcct ==  "checking"){
+                $transAmt = 0.001;
+                $newCheckingAcctBalance = 0;
+                $chkingBal = $chkingBal + $mobileDepositAmt;
+                $newCheckingAcctBalance = $newCheckingAcctBalance + $chkingBal;
+
+                 // This line is the sql to insert the data into the database table acctBalance
+                $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$recAcct', '$mobileDepositAmt','$transAmt', '$newCheckingAcctBalance','$savingBal')";
+
+                // This is a try and catch
+                try{ 
+
+                    // This if statement checks to see if the database and sql was executed, if it was executed it will
+                    // display the that the deposit was successful and shows the new checking blance total
+                    if(mysqli_query($database,$sql)){
+                    
+                        $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                        $mainContent .= "<h2>Your deposit to checking has been accepted! <br> Your current <span style=\"color:red;\">checking account </span>balance is : $$newCheckingAcctBalance</h2>";
+                        $mainContent .= "</div>";
+                    }
+                // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
+                } catch (Exception $e){
+                    $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                    $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
+                }
+            } 
+            /*This if statement will check to see if the receiving account is the savings account, if it is
+              it then takes the mobile deposit amount  and adds it to the savings account balance and stores it in
+              the new variable $newSavingsAccountBalance */
+            if ($recAcct == "saving"){
+                $transAmt = 0.001;
+                $newSavingsAcctBalance = 0 ;
+                $savingBal = $savingBal + $mobileDepositAmt;
+                $newSavingsAcctBalance = $newSavingsAcctBalance + $savingBal;
+
+                // This line is the sql to insert the data into the database table acctBalance
+                $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$recAcct','$mobileDepositAmt','$transAmt', '$chkingBal','$newSavingsAcctBalance')";
+
+                // This is a try and catch
+                try{ 
+
+                    //This if statement checks to see if the database and sql was executed, if it was executed it will
+                    // display the that the deposit was successful and shows the new savings blance total
+                    if(mysqli_query($database,$sql)){
+                    
+                        $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                        $mainContent .= "<h2 style=\"margin-bottom:0px;\">Your deposit to savings has been accepted! <br> Your current <span style=\"color:red;\">savings account </span>balance is : <br> $ $newSavingsAcctBalance</h2>";
+                        $mainContent .= "</div>";
+                    }
+                // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
+                } catch (Exception $e){
+                    $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                    $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
+                }
+            } 
+    }
 
     // Format Restrictions
     $fileSizeLimitByte = 15000000; // File size is bytes. Equals to 15MB
@@ -58,25 +177,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 
-$mobileDepositForm = new SimpleForm(
-    name: "Mobile Check Deposit",
-    fields: array(
-        new SimpleFormField(
-            type: "file",
-            name: "file-to-upload",
-            accessibleName: "Select Photo",
-            errorMessage: $error,
-            isRequired: true
-        ),
-    ),
-    instructions: "Snap a picture of a check and mobile deposit it here. Once the image is processed and reviewed, the funds will be deposited into your account.",
-    method: "POST",
-    action: "/banking/mobile-deposit.php",
-    submitButtonName: "Upload Image"
-);
-
 if($status) {
     $mobileDepositForm->instructions .= "<p>$status</p>";
 }
 $mainContent .= $mobileDepositForm->generateHtml();
 echo generatePage($mainContent);
+    
