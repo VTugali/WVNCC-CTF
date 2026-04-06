@@ -25,6 +25,7 @@ $mainContent .= createOurTeamEntry("Liam Clements","Director of IT Mischief ", "
 $mainContent .= createOurTeamEntry("Luke Urso","Director of “Just Draft Mendoza” Campaign", "304-555-7575", 803, "luke_urso@northernphish.com", "/img/profile/web/luke-bio-img.webp");
 $mainContent .= createOurTeamEntry("Frank Ciszek","Director  Lawsuits", "304-555-4884", 787, "frank_ciszek@northernphish.com", "/img/profile/web/frank-bio-img.webp");
 $mainContent .= createOurTeamEntry("Joseph Nemuras","Manager of Forced Enthusiasm", "304-555-9393", 841, "joseph_nemuras@northernphish.com", "/img/profile/web/joseph-bio-img.webp");
+$mainContent .= createOurTeamEntry("Kenny Iverson","Director of ", "304-555-2323", 795, "kenny_iverson@northernphish.com", "/img/profile/web/kenny-bio-img.webp");
 $mainContent .= "</tbody>";
 $mainContent .= "</table>";
 // Removed the contact form for now; if it is not obsolesced
