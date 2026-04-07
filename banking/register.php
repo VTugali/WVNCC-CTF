@@ -125,7 +125,7 @@ $registrationForm = new SimpleForm(
         } catch (Exception $e){
             $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
             $mainContent .= "<h2 style=\"margin-bottom:0;\">Thanks for choosing Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured registering your account,<br> please try again!</p></div>";
-            $mainContent .= "<div style=\"margin-left:25%; margin-bottom:10%;\"><img src=\"/img/giphy.webp\" width=\"500px\"; height=\"500px\";></div>"; 
+            $mainContent .= "<div style=\"margin-left:26%; margin-bottom:10%;\"><img src=\"/img/registerError.gif\" width=\"500px\"; height=\"500px\";></div>"; 
         }
     }
 
@@ -135,4 +135,3 @@ $registrationForm = new SimpleForm(
 }
 
 echo generatePage($mainContent); 
-    
