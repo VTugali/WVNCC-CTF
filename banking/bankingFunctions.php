@@ -98,7 +98,7 @@ function getTransactions($userId){
         echo generatePage($mainContent);
     }   else{
         //this displays if there are no transactions to show to the user
-        $mainContent .= "<div style=\" margin-left:25%; margin-top:10%;\"><h2>There are no transactions to show at this time</h2><br><img src=\"/img/depositMoney.gif\" style=\"margin-bottom:5%; margin-left:5%;\"></div>";
+        $mainContent .= "<div style=\" margin-left:25%; margin-top:10%;\"><h2>There are no transactions to show at this time</h2><br><img src=\"/img/depositMoney.jpg\" style=\"margin-bottom:5%; margin-left:5%;\"></div>";
          echo generatePage($mainContent);
     }      
 }
