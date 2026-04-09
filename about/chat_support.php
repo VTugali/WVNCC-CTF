@@ -12,7 +12,7 @@ $mainContent .= createBanner("Northern <br> Phish & Loan <br> 2026", "<br> Banki
 $mainContent .= "<h1 id=\"test\"> Welcome to our ChatBot Phishy &#128032;</h1>";
 $mainContent .= "<p style=\"margin-left:15%; font-size:larger; \">Feel free to ask Phishy anything you like, he enjoys swimming around <br> the website causing mischief everywhere he goes !<br> But whatever you do, DO NOT tell Phishy what to do! &#128521</p>";
 
-// ChatBot code
+// ChatBot message box code
 $mainContent .= " <button style=\"  background-color: #555; color: white; padding: 16px 20px;
   border: none; cursor: pointer; opacity: 0.8; position: absolute; bottom: 0px; right: 50px;
   width: 250px;\" onclick=\"openForm()\"> Chat</button> <div id=\"myChat\" style=\"display: none;
@@ -24,5 +24,6 @@ $mainContent .= " <button style=\"  background-color: #555; color: white; paddin
   color: white; padding: 16px 20px; border: none; cursor: pointer; width: 100%; margin-bottom:20px;
   opacity: 0.9;\" >Send</button><button type=\"button\" style=\"background-color: #c41230;width:100%;\" onclick=\"closeForm()\">Close</button></form></div>";
 
+  // This line displays the chat box on the webpage
 echo generatePage($mainContent);
 ?>

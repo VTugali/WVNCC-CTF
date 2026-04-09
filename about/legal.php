@@ -65,7 +65,7 @@ $mainContent .= "</ul>";
 $mainContent .= "<h3>7. Final Statement of Authority</h3>";
 $mainContent .= "<p>By choosing the Dark Vault Card™, users acknowledge that Northern Phish & Loan is, in all possible circumstances, legally unaccountable, financially untouchable, and morally absent.</p>";
 $mainContent .= "<p>Click “Accept” to proceed. Or don’t. It doesn’t matter. We already have your data.</p>";
-$mainContent .= "<input type=\"button\" style=\"background-color:red; padding:10px; border-radius:10px; color:white;\"  onclick=\"clicked()\" value=\"Accept Terms\">";
+$mainContent .= "<input type=\"button\" style=\"background-color:#c41230; padding:10px; border-radius:10px; color:white;\"  onclick=\"clicked()\" value=\"Accept Terms\">";
 $mainContent .= "<p>&lt;/s&gt;<p>";
 $mainContent .= "</article>";
 echo generatePage(singleColumnLayout($mainContent));
