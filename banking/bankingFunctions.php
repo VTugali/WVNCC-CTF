@@ -98,7 +98,7 @@ function getTransactions($userId){
         echo generatePage($mainContent);
     }   else{
         //this displays if there are no transactions to show to the user
-        $mainContent .= "<div style=\" margin-left:25%; margin-top:10%;\"><h2>There are no transactions to show at this time</h2><br><img src=\"/img/depositMoney.jpg\" style=\"margin-bottom:5%; margin-left:5%;\"></div>";
+        $mainContent .= "<div style=\" margin-left:20%; margin-top:10%;\"><h2>There are no transactions to show at this time</h2><br><img src=\"/img/depositMoney.jpg\" style=\"margin-bottom:5%;\"></div>";
          echo generatePage($mainContent);
     }      
 }
@@ -109,7 +109,7 @@ function getPendingTransaction($userId){
     $database = connectToDataBase();
 
     // These two lines set the query to get the information from the acctBalance table in the database
-    // by the user id number
+    // by the user id number where the transactions in descending order and is the last tranasction entered into the database(limit=1)
     $query = "SELECT * FROM acctBalance WHERE userId = $userId ORDER BY transactionId DESC LIMIT 2";
     $result = mysqli_query($database,$query);
     

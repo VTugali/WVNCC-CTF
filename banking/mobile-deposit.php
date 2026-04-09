@@ -63,7 +63,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     $user = userFromId((int)$userId);
     $chkingBal = getCheckingBalance($userId);
     $savingBal = getSavingsBalance($userId);
-    
+ 
     // This line sets the variable $database to the connectToDatabase function
     $database = connectToDatabase();
 

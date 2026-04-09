@@ -97,8 +97,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
                         $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
                         $mainContent .= "<h2>Great news! <br>Bank transfer has been accepted! </h2>";
                         
-                        // These two lines set the variables to the functions to get 
-                        // the balances for the checking and savings accounts
+                        // These two lines set the variables to the functions from the bankFunctions.php page to get 
+                        // the balances for the checking and savings accounts by the user's id and stores the value in the variables
+                        //$currentSavBal and $currentchkBal
                         $currentSavBal = getSavingsBalance($userId);
                         $currentchkBal = getCheckingBalance($userId);
                         $mainContent .= "<h2 style=\"margin-bottom:0px;\"><span style=\"color:red;\">Checking account balance: </span> $$currentchkBal <br> <span style=\"color:red;\">Savings account balance: </span>$$currentSavBal </h2></div>";
@@ -140,7 +141,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
                             $mainContent .= "<h2>Great news! <br>Bank transfer has been accepted! </h2>";
 
                             // These two lines set the variables to the functions to get 
-                            // the balances for the checking and savings accounts
+                            // the balances for the checking and savings accounts accounts by the user's id and stores 
+                            // the value in the variables $currentSavBal and $currentchkBal
                             $currentSavBal = getSavingsBalance($userId);
                             $currentchkBal = getCheckingBalance($userId);
                             $mainContent .= "<h2 style=\"margin-bottom:0px;\"><span style=\"color:red;\">Checking account balance:</span> $$currentchkBal <br> <span style=\"color:red;\">Savings account balance: </span>$$currentSavBal</h2></div>";
