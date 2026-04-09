@@ -77,6 +77,10 @@ CREATE TABLE fileUploads (
     FOREIGN KEY (transactionId) REFERENCES transactions(transactionId)
 );
 
+/*  Account Balances table that the mobile-deposit.php, transfer.php and 
+    bankTransactions.php pages use to store user information for the checking, savings
+    and bank transactions information referencing the table users userID
+*/
 CREATE TABLE acctBalance(
     transactionId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     userId INT NOT NULL, 
