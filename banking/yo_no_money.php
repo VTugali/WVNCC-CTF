@@ -2,7 +2,7 @@
 /*
     yo_no_money.php error page when bank customer tries to 
     transfer more money than they have in their account
-   displays message and funny gif character
+   displays this error message and funny gif character
 */
 session_start();
 include "/var/www/html/include/functions.php";
