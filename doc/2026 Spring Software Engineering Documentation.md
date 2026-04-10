@@ -14,7 +14,7 @@
 ## terms_accepted.php webpage
 1. Created and coded the terms_accepted.php webpage for url tampering catch for the legal.php page, if the url is changed to legal.php?accepted=1 it will display that the user did not accept the legal terms and used url tampering to get to the webpage
 
-## chat_support.php & chat_action.php 
+## chat_support.php & chat_action.php webpages
 1. Created and coded the chat_support.php and chat_action.php for the pop up chat box we named "Phishy". Coded error messages for sql injections and javascript usage which displays two different messages to the user where they capture a flag for discovering the cyber vulnerability. The chat bot does have an issue as it responds very slow due to being on a virtual machine using ollama, still need to fix that issue for faster responses.
 2. Cyber Security team member Caleb Cunnigham coded the Ollama portion of the chat_action.php page to return and display ai responses, added the init_ollama.sh page & updated the install_mysql.sh page for curl and ollama
 
@@ -43,3 +43,9 @@
     b. getSavingsBalance($userId)
     c. getTransactions($userId)
     d. getPendingTransactions($userId)
+
+## register.php & registerAction.php webpages
+1. Created and coded a new register.php page and registerAction.php to display a new registration form with a captcha. If the user gets the captcha wrong it will display a message letting them know the captcha is incorrect and after 3 tries it will display a message that they are now locked out. When the user gets the captcha correct it will then display that their account has been created and they can now login. I did use the "get" method and it worked correctly for my pages but ran into login error issues with previous code written in BTB project.
+
+## bankFunctions.php file
+1. Coded and added the functions generatCpatcha()and validateCaptcha() to the bankFunctions.php file, and removed the js functions from the functions.php page added them to this page.
