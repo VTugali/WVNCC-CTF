@@ -34,7 +34,7 @@ if(isLoggedIn()) {
                 type: "select",
                 name: "account-type",
                 accessibleName: "Account Type",
-                options: array("Checking", "Saving", "Dark Vault Credit", "Morgage"),
+                options: array("checking" => "Checking", "saving" => "Saving", "dark vault credit" => "Dark Vault Credit", "morgage" => "Morgage"),
                 isRequired: true
             ),
             new SimpleFormField(
