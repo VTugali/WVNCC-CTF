@@ -15,7 +15,7 @@ enum AccountType {
         $type = strtolower($accountType);
         if($type == "saving") {
             return AccountType::SAVING;
-        } else if(str_contains($type, "dark vault")) {
+        } else if(str_contains($type, "dark vault credit")) {
             return AccountType::DARK_VAULT_CREDIT;
         } else if($type == "morgage") {
             return AccountType::MORGAGE;
