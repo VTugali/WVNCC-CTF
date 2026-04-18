@@ -29,7 +29,7 @@ $mobileDepositForm = new SimpleForm(
             name: "to-account",
             accessibleName: "Receiving Account",
             defaultValue: "",
-            options: array(
+           options: array(
                 "checking" => "Checking", 
                 "saving" => "Saving"
             ),
@@ -63,7 +63,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     $user = userFromId((int)$userId);
     $chkingBal = getCheckingBalance($userId);
     $savingBal = getSavingsBalance($userId);
- 
+
+    $transAmt = 0;
+    $paymentAmt = 0;
+   
     // This line sets the variable $database to the connectToDatabase function
     $database = connectToDatabase();
 
@@ -77,14 +80,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
               it then takes the mobile deposit amount  and adds it to the checking account balance and stores it in
               the new variable $newCheckingAccountBalance */
             if ($recAcct ==  "checking"){
-                $transAmt = 0.001;
+             
                 $newCheckingAcctBalance = 0;
+
                 $chkingBal = $chkingBal + $mobileDepositAmt;
                 $newCheckingAcctBalance = $newCheckingAcctBalance + $chkingBal;
 
-                 // This line is the sql to insert the data into the database table acctBalance
-                $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$recAcct', '$mobileDepositAmt','$transAmt', '$newCheckingAcctBalance','$savingBal')";
+                $newCheckingBal = sprintf("%.2f", $newCheckingAcctBalance);
 
+                 // This line is the sql to insert the data into the database table acctBalance
+                $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$recAcct', '$mobileDepositAmt','$transAmt','$paymentAmt', '$newCheckingAcctBalance','$savingBal')";
+
+               
                 // This is a try and catch
                 try{ 
 
@@ -93,7 +100,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
                     if(mysqli_query($database,$sql)){
                     
                         $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                        $mainContent .= "<h2>Your deposit to checking has been accepted! <br> Your current <span style=\"color:red;\">checking account </span>balance is : $$newCheckingAcctBalance</h2>";
+                        $mainContent .= "<h2>Your deposit to checking has been accepted! <br> Your current <span style=\"color:red;\">checking account </span>balance is : $$newCheckingBal</h2>";
                         $mainContent .= "</div>";
                     }
                 // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
@@ -106,13 +113,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
               it then takes the mobile deposit amount  and adds it to the savings account balance and stores it in
               the new variable $newSavingsAccountBalance */
             if ($recAcct == "saving"){
-                $transAmt = 0.001;
+               
                 $newSavingsAcctBalance = 0 ;
                 $savingBal = $savingBal + $mobileDepositAmt;
                 $newSavingsAcctBalance = $newSavingsAcctBalance + $savingBal;
 
+                $newSavingsBal = sprintf("%.2f", $newSavingsAcctBalance);
                 // This line is the sql to insert the data into the database table acctBalance
-                $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$recAcct','$mobileDepositAmt','$transAmt', '$chkingBal','$newSavingsAcctBalance')";
+                $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$recAcct','$mobileDepositAmt','$transAmt', '$paymentAmt', '$chkingBal','$newSavingsAcctBalance')";
 
                 // This is a try and catch
                 try{ 
@@ -122,7 +130,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
                     if(mysqli_query($database,$sql)){
                     
                         $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                        $mainContent .= "<h2 style=\"margin-bottom:0px;\">Your deposit to savings has been accepted! <br> Your current <span style=\"color:red;\">savings account </span>balance is : <br> $ $newSavingsAcctBalance</h2>";
+                        $mainContent .= "<h2 style=\"margin-bottom:0px;\">Your deposit to savings has been accepted! <br> Your current <span style=\"color:red;\">savings account </span>balance is : <br> $ $newSavingsBal</h2>";
                         $mainContent .= "</div>";
                     }
                 // This catch will can any exceptions and return the message to the user that an error has occured to the webpage

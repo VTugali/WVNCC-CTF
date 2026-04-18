@@ -35,8 +35,7 @@ $mainContent .= "<div style=\"background-color:#f0f8ff; margin:5% 0 0 0;\" >
 <input type=\"password\" id=\"password\" name=\"password\" style=\"margin: 1% 0 1% 3%;\" required><br>
 
 <label for=\"retypePswd\" style=\"margin-bottom:10px;margin-left:15px;\">Retype Password:</label>
-<input type=\"password\" id=\"retpyePswd\" name=\"retypePswd\" style=\"margin: 1% 0 1% 3%;\" required><br><br>
-";
+<input type=\"password\" id=\"retpyePswd\" name=\"retypePswd\" style=\"margin: 1% 0 1% 3%;\" required><br><br>";
 
 // This is the code to create the canvas captcha for the captcha in the registration form 
 // and the two buttons call the generatCaptcha() and validateCaptcha() functions from the functions.php file
