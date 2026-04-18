@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS acctBalance;
+DROP TABLE IF EXISTS loanBalance;
 
 /*
     CIT 291 - CIT Internship & Certification
@@ -85,11 +86,27 @@ CREATE TABLE acctBalance(
     transactionId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     userId INT NOT NULL, 
     accountName VARCHAR(25) NOT NULL,
+    fromAcct VARCHAR(25),
     depositAmount DECIMAL(30, 2) NOT NULL,
-    transferAmount DECIMAL(30,2) NOT NULL,
+    transferAmount DECIMAL(30,2) DEFAULT 0.00,
+    paymentAmt DECIMAL(30,2) DEFAULT 0.00,
     checkingBalance DECIMAL(30, 2) DEFAULT 0.00,
     savingsBalance DECIMAL(30, 2) DEFAULT 0.00,
     FOREIGN KEY (userId) REFERENCES users(userId)
+);
+
+/*  Loan Account Balances table that the payments.php, and 
+    loanTransactions.php pages use to store user information for the dark vault credit and the morgage
+    and payment transactions information referencing the table users userID and acctBlance transactionId
+*/
+CREATE TABLE loanBalance(
+    transactionId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    userId INT NOT NULL, 
+    accountName VARCHAR(25) NOT NULL,
+    fromAcct VARCHAR(25),
+    paymentAmount DECIMAL(30,2) DEFAULT 0.00,
+    morgageBalance DECIMAL(30, 2) DEFAULT 0.00,
+    darkVaultBalance DECIMAL(30, 2) DEFAULT 0.00
 );
 
 /* Sample data */
