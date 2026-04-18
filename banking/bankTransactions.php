@@ -13,5 +13,4 @@ include "/var/www/html/banking/bankingFunctions.php";
 // and stores it in the variable $userId and gets all transactions by calling 
 // the getTransactions function in the bankFunctions.php page
 $userId = $_COOKIE["logged-in-user"];
-$user = userFromId((int)$userId);
 getTransactions($userId);
