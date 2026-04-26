@@ -152,7 +152,7 @@ function getTransactions($userId){
     }   else{
 
         //This displays if there are no transactions to show to the user
-        $mainContent .= "<div style=\" margin-left:20%; margin-top:10%;\"><h2>There are no transactions to show at this time</h2><br><img src=\"/img/depositMoney.jpg\" style=\"margin-bottom:5%;\"></div>";
+        $mainContent .= "<div style=\" margin-left:25%; margin-top:10%;\"><h2>There are no transactions to show at this time</h2><br><img src=\"/img/depositMoney.jpg\" style=\"margin-bottom:5%;\"></div>";
         echo generatePage($mainContent);
     }
     mysqli_close($database);      
@@ -295,9 +295,12 @@ function getDkvBalance($userId){
 // This function is to process the payments in the payments.php action page
 function payments($userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt,$chkingBal, $savingBal,$mgBal,$dkvBal){
 
+
 $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
 
     $mainContent = "";
+
+   
         //This line sets the variable $database1 and datbase2 to the connectToDatabase function to connect
         // to the database for two different database insertions
         $database1 = connectToDatabase();
@@ -309,7 +312,7 @@ $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
             die ("Connection Failed".$database1->connect_error);
             die ("Connection Failed".$database2->connect_error);
         } else {
-
+               
             // This is the if statement to check to see if the from account is the checking account
             if ($frAcct == "checking"){
                 // This if statement checks to see if the to account is morgage
@@ -540,14 +543,50 @@ $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
         mysqli_close($database1);
         mysqli_close($database2);
 
+
 // This line displays the webpage content in $mainContent to the user 
-// by calling the function generatePage()
+// by calling the function generatePage() end of payments function
 echo generatePage($mainContent);
 
 }
 
+// This function is to detect sucessful sql injection of "SELECT * FROM users" in the change-password.php page
+function sqlInjection(){
 
+    // This line sets the variable $database to the connectToDatabase function to connect to the database
+    $database = connectToDatabase();
+    $mainContent = "";
+
+    // This line is the query to select all from the users table in the database and stores the 
+    // result of the query in the variable $result
+    $query = "SELECT * FROM users";
+    $result = mysqli_query($database,$query);
+
+    // This if statment checks to see if there is any result in the database  
+    // if there  is the while loop will fetch the results
+    if(mysqli_num_rows($result) > 0){
+
+    // sucessful sql injection message to display to the user
+        $mainContent .= "<h2 style=\"margin: 5% 0 0 30%;\">Ok, Ninja Hacker! &#129315;<br> You have sucessfully used sql injection! &#128681 </h2>";
+        $mainContent .= "<table id=\"meet-our-team\">";
+        
+        // Thsi while loop will fetch the results and stores them in the variable names for the webpage display inside a table to the user in $mainContent
+        while($row = mysqli_fetch_assoc($result)){
+            $userName = $row["username"];
+            $userPassword = $row["password"];
+            $mainContent .= "<tr><td> $userName</td><td>$userPassword</td></tr>";
+          
+        }
+        // end of html table element
+        $mainContent .= "</table>";
+
+        // returns the html maincontent to display to the user
+        return ($mainContent);
+    }
+}
+ 
 ?>
+
 <script>
 
 let captchaCode = "";
@@ -620,4 +659,5 @@ function validateCaptcha() {
         });
     }  
 }
+
 </script>

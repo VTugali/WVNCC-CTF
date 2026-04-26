@@ -5,6 +5,7 @@
 */
 session_start();
 include "/var/www/html/include/functions.php";
+include "/var/www/html/banking/bankingFunctions.php";
 
 $mainContent = "";
 $passwordError = "";
@@ -25,16 +26,35 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         $user = userFromId((int)$userId);
         $passwordIsCorrect = $currentPassword == $user->password;
         $passwordsMatch = $newPassword == $retypePassword;
+        
         if(!$passwordIsCorrect) {
             $passwordError = "Password Incorrect.";
         }
         if(!$passwordsMatch) {
             $retypePasswordError = "You must enter the same password twice.";
         }
+
+        // This if statement checks to see if the the new password contains "SELECT * FROM users" 
+        // if it does it will redirect to the sqlSuccess.php page
+        if (str_contains($newPassword ,"SELECT * FROM users")){
+            $mainContent .= "<script>window.location = \"http://localhost/banking/sqlSuccess.php\" </script>";
+        }
+
         if($passwordIsCorrect && $passwordsMatch) {
-            $query = "UPDATE users SET password=\"$newPassword\" WHERE userId=\"$userId\"";
-            $conn->query($query);
-            header("Location: /");
+            
+            // This is a try and catch
+            try{
+                // This line is the query to update the users password
+                $query = "UPDATE users SET password=\"$newPassword\" WHERE userId=\"$userId\"";
+                $conn->query($query);
+                // The html content that displays the password change was sucessful
+                $mainContent .= "<h2 style=\"margin: 5% 0 0 30%;\"> Your password has now been changed</h2>";
+
+            // This catches any sql exception and displays the html error message below to the user
+            } catch (Exception $e){
+                $mainContent .= "<h2 style=\"margin: 5% 0 0 30%;\"> <br> Nice try there Slick!! &#128514; <br> Your password contains sql injection!</h2>";
+        
+            }
         } else {
             
         }
