@@ -57,6 +57,9 @@
 
 3. Added sprint("%.2f,$variableName) to format the checking and the savings accounts to show the decimals to 2 places.
 
+5. Added hashed data to the mobile-deposit.php page to check for man in the middle attack which calls the funtion processMobile() from the bankingFunctions.php page which checks to see if the hashed data is the same if it is not it displays a flag page for man in the middle attack
+
+6. Moved all main code to function sin bankingFunctions.php page
 
 ## transfer.php webpage - in the banking folder
 1. Added code to the transfer.php page to connect to the database, and to insert the user's information for the account that is sending the transfer and the account receiving the funds transfer and the amount of funds being transferred from the form and then inserts the data into the database table acctBalance by userId.
@@ -67,6 +70,10 @@
 
 4. Added code to check if the fromAcct is NOT the same as the receiving account, if it is it will display the error message on line 77
 
+
+5. Added hashed data to the transfer.php page to check for man in the middle attack which calls the funtion processTransfer() from the bankingFunctions.php page which checks to see if the hashed data is the same if it is not it displays a flag page for man in the middle attack
+
+6. Moved all main code to function in bankingFunctions.php page
 
 ## bankTransactions.php webpage - in the banking folder
 1. Created and coded the bankTransactions.php page to display pending and all completed transactions to the user using the function getTransaction($userId) in the bankFunctions.php page by the user id number 
@@ -97,6 +104,11 @@
 
 7. Added the sqlInjection() function for detecting sql injection for the change-password.php pageto return  the sql success page when the user succesfully enters "SELECT * FROM users" as the new password
 
+4. Created functions in the bankTransaction.php page to check for hidden hashed data if man in the middle attack occurs on for the mobile-deposit.php, payments.php and transfer.php webpages and it will display a man in the middle message to the attacker when an attack occurs:
+    a. processMobile($ss,$userId,$mobileDepositAmt,$recAcct)
+    b. processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt)
+    c. processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId)
+    
 
 ## payment.php & paymentAction.php webpages - Coded using the GET form method - in the banking folder
 1. Coded and created the new payments.php and paymentAction.php web pages using GET. In the payments.php page I have left a script that I plan to use for referencing the window location referrer for possible tampering of the data from the GET form action.
@@ -108,8 +120,12 @@ There are also 4 functions that get the account balances for the checking, savin
 
 4. Used Burpsuite on the payment.php and transfer.php pages, a user can intercept payments and transfers and forward new amounts to user's acccounts by changing the user id while being logged in under their own account.
 
+5. Added hashed data to the payment.php page to check for man in the middle attack which calls the funtion processPayment() from the bankingFunctions.php page which checks to see if the hashed data is the same if it is not it displays a flag page for man in the middle attack. 
+
+6. Moved all main code to function in bankingFunctions.php page
+
 ## change-password.php  & sqlSuccess.php webpages
-1. added code the page for checking for mysql exceptions. It will display an error message to the user that the password contains sql injection. It will only display the sqlSuccess.php if the user enters "SELECT * FROM users" sql as the new password where the user recieves the usernames and passwords and a flag for finding the vulnerability.
+1. added code the page for checking for mysql exceptions. It will display an error message to the user that the password contains sql injection. It will only display the sqlSuccess.php if the user enters "SELECT * FROM users" sql as the new password where the user receives the usernames and passwords and a flag for finding the vulnerability.
 
 ## testIframe.php webpage - is not linked to the navigation is a test page- located in the banking folder
 1. Created this page with an iframe and the src is pointed at testIframe.php. it displays the entire BTB website inside the iframe and is live and functional.
