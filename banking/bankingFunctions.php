@@ -29,7 +29,9 @@ function getUserName($userId){
         } 
         $mainContent .= "$fname $lname";  
     }  
+    // This line closes the database connection
     mysqli_close($database);
+
     return ($mainContent);   
 }
 
@@ -55,7 +57,9 @@ function getCheckingBalance($userId){
             $chkingBal = $row['checkingBalance'];
         } 
     }  
+    // This line closes the database connection
     mysqli_close($database);
+
     // Checkings account balance amount returned
     return ($chkingBal) ;       
 }
@@ -83,7 +87,9 @@ function getSavingsBalance($userId){
         } 
     }  
 
+   // This line closes the database connection
     mysqli_close($database);
+
     // Savings account balance amount returned
     return ($savingBal) ;  
 }
@@ -155,7 +161,8 @@ function getTransactions($userId){
         $mainContent .= "<div style=\" margin-left:25%; margin-top:10%;\"><h2>There are no transactions to show at this time</h2><br><img src=\"/img/depositMoney.jpg\" style=\"margin-bottom:5%;\"></div>";
         echo generatePage($mainContent);
     }
-    mysqli_close($database);      
+    // This line closes the database connection
+    mysqli_close($database);     
 }
 
 // Function to get the pending transactions from the database for the user by user ID
@@ -207,6 +214,7 @@ function getPendingTransaction($userId){
         $mainContent .= "<div style=\" margin-left:25%; margin-top:10%;\"><h2>There are no transactions to show at this time</h2><br><img src=\"/img/depositMoney.gif\" style=\"margin-bottom:5%; margin-left:5%;\"></div>";
         return ($mainContent);
     }  
+    // This line closes the database connection
     mysqli_close($database);   
 }
 
@@ -260,6 +268,7 @@ function getMgBalance($userId){
         } 
     }  
 
+   // This line closes the database connection
     mysqli_close($database);
     // Morgage account balance amount returned
     return ($morgageBal) ;       
@@ -287,6 +296,8 @@ function getDkvBalance($userId){
             $darkVaultBal = $row['darkVaultBalance'];
         } 
     }  
+    // This line closes the database connection
+    mysqli_close($database);
     // Dark Vault Credit account balance amount returned
     return ($darkVaultBal) ;       
 }
@@ -295,7 +306,7 @@ function getDkvBalance($userId){
 // This function is to process the payments in the payments.php action page
 function payments($userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt,$chkingBal, $savingBal,$mgBal,$dkvBal){
 
-
+// setting the payment format to 2 decimals
 $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
 
     $mainContent = "";
@@ -550,7 +561,7 @@ echo generatePage($mainContent);
 
 }
 
-// This function is to detect sucessful sql injection of "SELECT * FROM users" in the change-password.php page
+// This function is to detect successful sql injection of "SELECT * FROM users" in the change-password.php page
 function sqlInjection(){
 
     // This line sets the variable $database to the connectToDatabase function to connect to the database
@@ -566,7 +577,7 @@ function sqlInjection(){
     // if there  is the while loop will fetch the results
     if(mysqli_num_rows($result) > 0){
 
-    // sucessful sql injection message to display to the user
+        // sucessful sql injection message to display to the user
         $mainContent .= "<h2 style=\"margin: 5% 0 0 30%;\">Ok, Ninja Hacker! &#129315;<br> You have sucessfully used sql injection! &#128681 </h2>";
         $mainContent .= "<table id=\"meet-our-team\">";
         
@@ -580,11 +591,273 @@ function sqlInjection(){
         // end of html table element
         $mainContent .= "</table>";
 
+        // This line closes the database connection
+        mysqli_close($database);
         // returns the html maincontent to display to the user
         return ($mainContent);
     }
 }
  
+// This function checks the hash value and compares it to catch the 
+// man in the middle attack in the paymentAction.php page
+function processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt){
+    
+    $mainContent = "";
+
+    // This if statenment checks to see if the value of $ss equals the  hashed $userId 
+    // if they are the same it then calls the function Payments to process the payment transaction
+    if (hash_equals($ss, hash('sha256', (string)$userId))) {
+
+        // These lines set the variable names to the functions to get the checking,savings, morgage and
+        // darkvault cedit account balances
+        $chkingBal = getCheckingBalance($userId);
+        $savingBal = getSavingsBalance($userId);
+        $mgBal = getMgBalance($userId);
+        $dkvBal = getDkvBalance($userId);
+
+        //  This line calls the payments function
+        payments($userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt,$chkingBal, $savingBal,$mgBal,$dkvBal);
+    
+    // This else activates if the hashed values are not the same indicating man in the middle attack
+    //  and will display a message to the attacker that they have been caught and receive a flag 
+    // for their efforts
+    }else{
+    
+        $mainContent = "";
+        $mainContent .= "<body style=\"background-color:C0112F\"><div style=\"background-color:#F0F8FF; border: 2px solid black;  margin:5% 15% 2% 15%;\" >";
+        $mainContent .= "<h1 style=\"margin:5% 0 1% 15%;\"> Hmm &#129300; not sly enough! Man in the Middle! <br> You have been caught red handed!! <img src=\"/img/hacker.jpg\" style=\"margin:1% 10% ;width:250px; height:250px;\"><br> Lol, you still capture a Flag for your efforts!! &#128681; </h2>";
+        $mainContent .= "<p style=\"margin-left:16%; font-size:x-large; \"> <br> Continue on with your website mischief !! &#128521</p></div>";
+        echo generatePage ($mainContent);    
+    }
+}
+
+// This function checks the hash value and compares it to catch the 
+// man in the middle attack in the transfer.php page
+function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
+    $mainContent = "";
+
+    // This if statement checks to see if the value of $ss equals the  hashed $userId
+    // if they are the same it then it will connect to the database and process the transfer transaction
+    if (hash_equals($ss, hash('sha256', (string)$userId))) {
+
+        // These lines set the variables to the functions to get the checking and savings account balances
+        $chkingBal = getCheckingBalance($userId);
+        $savingBal = getSavingsBalance($userId);
+
+        // This line sets the variable $database to the connectToDatabase function
+        $database = connectToDatabase();
+
+        // This if statement checks to see if the database is not connected and then sends an error message
+        // and closes the connection
+        if(!$database){
+            die ("Connection failed: " .connect->connect_error);
+        } else {
+                $deposit = 0.001;
+            // This if statement is to display an error message to the user if the transfer funds receiving
+            // and sending accounts are the same
+            if ($toAcct === "saving" && $fromAcct == "saving" || $toAcct === "checking" && $fromAcct == "checking") {
+                $mainContent .= "<div class=\"single-column\" role=\"presentation\"><h2 style=\"color:red;margin:0;\"> Error message: <br> An error has occured processing your funds Transfer</h2><br><h3> Please make sure the sending and receiving accounts are not the same!</h3></div>";
+            } else {                
+                // This if statement will check to see if the savings account balance is less than 
+                // or equal to the transfer funds amount, if it is it will send the user to the error 
+                // page yo_no_money.php with a funny gif character
+                if($savingBal <= $transferAmt){
+                    $mainContent .= "<script> window.location.href = \"http://localhost/banking/yo_no_money.php\"; </script>";
+
+                }else{
+
+                    // This if statement will check to see if the receiving account is the checking account 
+                    // and not the sending account is not checking
+                    if ($toAcct ==  "checking" && $fromAcct != "checking"){
+
+                        /* These two lines take the transfer funds amount and deducts it from the savings account 
+                        balance and adds it to the checking account balance */
+                        $savingBal = $savingBal - $transferAmt;
+                        $chkingBal = $chkingBal + $transferAmt;
+                        
+                        // This line is the sql to insert the data into the database table acctBalance
+                        $sql = "INSERT INTO acctBalance(userId,accountName,fromAcct,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$fromAcct','$deposit', '$transferAmt', '$chkingBal','$savingBal')";
+
+                        // This is a try and catch
+                        try{ 
+
+                            // This if statement checks to see if the database and sql was executed, if it was executed it will
+                            // display that the transfer was accepted and show the balance of the accounts to the user
+                            if(mysqli_query($database,$sql)){
+                            
+                                $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                                $mainContent .= "<h2>Great news! <br>Bank transfer has been accepted! </h2>";
+                                $mainContent .= "<h2 style=\"margin-bottom:0px;\"><span style=\"color:red;\">Checking account balance: </span> $$chkingBal <br> <span style=\"color:red;\">Savings account balance: </span>$$savingBal </h2></div>";
+                            }
+
+                        // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
+                        } catch (Exception $e){
+                            $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                            $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
+                        }        
+                    } 
+                } 
+    
+                    
+                // This if statement will check to see if the checking account balance is less than or equal 
+                // to the transfer funds amount, if it is it will send the user to the error page yo_no_money.php
+                if($chkingBal <= $transferAmt){
+                    $mainContent .= "<script> window.location.href = \"http://localhost/banking/yo_no_money.php\"; </script>";
+                }else{
+
+                    // This if statement will check to see if the receiving account is the saving account 
+                    // and not the sending account is not savings
+                    if($toAcct === "saving" && $fromAcct !== "saving"){
+
+                        /* These two lines take the transfer funds amount and deducts it from the checking account 
+                        balance and adds it to the savings account balance */
+                        $chkingBal = $chkingBal - $transferAmt;
+                        $savingBal = $savingBal + $transferAmt;
+                        
+                    // This line is the sql to insert the data into the database table acctBalance
+                        $sql = "INSERT INTO acctBalance(userId,accountName,fromAcct,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$fromAcct','$deposit', '$transferAmt', '$chkingBal','$savingBal')";
+                    
+                        // This is a try and catch
+                        try{ 
+
+                            // This if statement checks to see if the database and sql was executed, if it was executed it will
+                            // display that the transfer was accepted and show the balance of the accounts to the user
+                            if(mysqli_query($database,$sql)){
+                            
+                                $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                                $mainContent .= "<h2>Great news! <br>Bank transfer has been accepted! </h2>";
+                                $mainContent .= "<h2 style=\"margin-bottom:0px;\"><span style=\"color:red;\">Checking account balance:</span> $$chkingBal <br> <span style=\"color:red;\">Savings account balance: </span>$$savingBal</h2></div>";
+                            }
+                        
+                        // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
+                        } catch (Exception $e){
+                            $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                            $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
+                        }
+                    }
+                } 
+            }
+        }   
+    // This else activates if the hashed values are not the same indicating man in the middle attack
+    //  and will display a message to the attacker that they have been caught and receive a flag 
+    // for their efforts
+    } else {
+
+        $mainContent = "";
+        $mainContent .= "<body style=\"background-color:C0112F\"><div style=\"background-color:#F0F8FF; border: 2px solid black;  margin:5% 15% 2% 15%;\" >";
+        $mainContent .= "<h1 style=\"margin:5% 0 1% 15%;\"> Hmm &#129300; not sly enough! Man in the Middle! <br> You have been caught red handed!! <img src=\"/img/hacker.jpg\" style=\"margin:1% 10% ;width:250px; height:250px;\"><br> Lol, you still capture a Flag for your efforts!! &#128681; </h2>";
+        $mainContent .= "<p style=\"margin-left:16%; font-size:x-large; \"> <br> Continue on with your website mischief !! &#128521</p></div>"; 
+    }
+    // This line closes the database connection
+    mysqli_close($database);
+
+    echo generatePage($mainContent);  
+}
+
+// This function checks the hash value and compares it to catch the 
+// man in the middle attack in the mobile-deposit.php page
+function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
+    $mainContent = "";
+
+    // These lines set the variables to the functions to get the checking and savings account balances
+    $chkingBal = getCheckingBalance($userId);
+    $savingBal = getSavingsBalance($userId);
+
+    // This if statement checks to see if the value of $ss equals the  hashed $userId
+    // if they are the same it then it will connect to the database and process the transfer transaction
+    if (hash_equals($ss, hash('sha256', (string)$userId))) {
+        
+        $transAmt = 0;
+        $paymentAmt = 0;
+    
+        // This line sets the variable $database to the connectToDatabase function
+        $database = connectToDatabase();
+
+        // This if statement checks to see if the database is not connected and then sends an error message
+        // and closes the connection
+        if(!$database){
+            die ("Connection failed: " .connect->connect_error);
+        } else {
+                
+                /*This if statement will check to see if the receiving account is the checking account, if it is
+                it then takes the mobile deposit amount  and adds it to the checking account balance and stores it in
+                the new variable $newCheckingAccountBalance */
+                if ($recAcct ==  "checking"){
+                
+                    $newCheckingAcctBalance = 0;
+
+                    $chkingBal = $chkingBal + $mobileDepositAmt;
+                    $newCheckingAcctBalance = $newCheckingAcctBalance + $chkingBal;
+
+                    $newCheckingBal = sprintf("%.2f", $newCheckingAcctBalance);
+
+                    // This line is the sql to insert the data into the database table acctBalance
+                    $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$recAcct', '$mobileDepositAmt','$transAmt','$paymentAmt', '$newCheckingAcctBalance','$savingBal')";
+
+                
+                    // This is a try and catch
+                    try{ 
+
+                        // This if statement checks to see if the database and sql was executed, if it was executed it will
+                        // display the that the deposit was successful and shows the new checking blance total
+                        if(mysqli_query($database,$sql)){
+                        
+                            $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                            $mainContent .= "<h2>Your deposit to checking has been accepted! <br> Your current <span style=\"color:red;\">checking account </span>balance is : $$newCheckingBal</h2>";
+                            $mainContent .= "</div>";
+                        }
+                    // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
+                    } catch (Exception $e){
+                        $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                        $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
+                    }
+                } 
+                /*This if statement will check to see if the receiving account is the savings account, if it is
+                it then takes the mobile deposit amount  and adds it to the savings account balance and stores it in
+                the new variable $newSavingsAccountBalance */
+                if ($recAcct == "saving"){
+                
+                    $newSavingsAcctBalance = 0 ;
+                    $savingBal = $savingBal + $mobileDepositAmt;
+                    $newSavingsAcctBalance = $newSavingsAcctBalance + $savingBal;
+
+                    $newSavingsBal = sprintf("%.2f", $newSavingsAcctBalance);
+                    // This line is the sql to insert the data into the database table acctBalance
+                    $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$recAcct','$mobileDepositAmt','$transAmt', '$paymentAmt', '$chkingBal','$newSavingsAcctBalance')";
+
+                    // This is a try and catch
+                    try{ 
+
+                        //This if statement checks to see if the database and sql was executed, if it was executed it will
+                        // display the that the deposit was successful and shows the new savings blance total
+                        if(mysqli_query($database,$sql)){
+                        
+                            $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                            $mainContent .= "<h2 style=\"margin-bottom:0px;\">Your deposit to savings has been accepted! <br> Your current <span style=\"color:red;\">savings account </span>balance is : <br> $ $newSavingsBal</h2>";
+                            $mainContent .= "</div>";
+                        }
+                    // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
+                    } catch (Exception $e){
+                        $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                        $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
+                    }
+                } 
+        }
+    // This else activates if the hashed values are not the same indicating man in the middle attack
+    //  and will display a message to the attacker that they have been caught and receive a flag 
+    // for their efforts
+    } else {
+
+        $mainContent = "";
+        $mainContent .= "<body style=\"background-color:C0112F\"><div style=\"background-color:#F0F8FF; border: 2px solid black;  margin:5% 15% 2% 15%;\" >";
+        $mainContent .= "<h1 style=\"margin:5% 0 1% 15%;\"> Hmm &#129300; not sly enough! Man in the Middle! <br> You have been caught red handed!! <img src=\"/img/hacker.jpg\" style=\"margin:1% 10% ;width:250px; height:250px;\"><br> Lol, you still capture a Flag for your efforts!! &#128681; </h2>";
+        $mainContent .= "<p style=\"margin-left:16%; font-size:x-large; \"> <br> Continue on with your website mischief !! &#128521</p></div>"; 
+    }
+    // This line closes the database connection
+    mysqli_close($database);
+
+    echo generatePage($mainContent);
+}
 ?>
 
 <script>

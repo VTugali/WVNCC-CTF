@@ -8,6 +8,8 @@ include "/var/www/html/include/functions.php";
 include "/var/www/html/banking/bankingFunctions.php";
 
 $mainContent = "";
+$cookie_val = $_COOKIE["logged-in-user"];
+$hash = hash('sha256', (string)$cookie_val);
 
 $transferForm = new SimpleForm(
     name: "Transfer Funds",
@@ -39,6 +41,13 @@ $transferForm = new SimpleForm(
             accessibleName: "Amount",
             isRequired: true
         ),
+        new SimpleFormField(
+            type: "hidden",
+            name: "transId",
+            defaultValue: "$hash",
+            accessibleName: "transId",
+            isRequired: true
+        ),
     ),
     instructions: "",
     method: "POST",
@@ -57,112 +66,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     //These two lines get the user id from the cookie of the logged in user
     $userId = $_COOKIE["logged-in-user"];
     $user = userFromId((int)$userId);
+    $ss = $_POST['transId'];
 
-    // Thses two lines set the variables to the functions to get the checking and savings account balances
-    $chkingBal = getCheckingBalance($userId);
-    $savingBal = getSavingsBalance($userId);
-
-    // This line sets the variable $database to the connectToDatabase function
-    $database = connectToDatabase();
-
-    // This if statement checks to see if the database is not connected and then sends an error message
-    // and closes the connection
-    if(!$database){
-        die ("Connection failed: " .connect->connect_error);
-    } else {
-            $deposit = 0.001;
-        // This if statement is to display an error message to the user if the transfer funds receiving
-        // and sending accounts are the same
-        if ($toAcct === "saving" && $fromAcct == "saving" || $toAcct === "checking" && $fromAcct == "checking") {
-            $mainContent .= "<div class=\"single-column\" role=\"presentation\"><h2 style=\"color:red;margin:0;\"> Error message: <br> An error has occured processing your funds Transfer</h2><br><h3> Please make sure the sending and receiving accounts are not the same!</h3></div>";
-        } else {                
-            // This if statement will check to see if the savings account balance is less than 
-            // or equal to the transfer funds amount, if it is it will send the user to the error 
-            // page yo_no_money.php with a funny gif character
-            if($savingBal <= $transferAmt){
-                $mainContent .= "<script> window.location.href = \"http://localhost/banking/yo_no_money.php\"; </script>";
-
-            }else{
-
-                // This if statement will check to see if the receiving account is the checking account 
-                // and not the sending account is not checking
-                if ($toAcct ==  "checking" && $fromAcct != "checking"){
-
-                    /* These two lines take the transfer funds amount and deducts it from the savings account 
-                    balance and adds it to the checking account balance */
-                    $savingBal = $savingBal - $transferAmt;
-                    $chkingBal = $chkingBal + $transferAmt;
-                    
-                    // This line is the sql to insert the data into the database table acctBalance
-                    $sql = "INSERT INTO acctBalance(userId,accountName,fromAcct,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$fromAcct','$deposit', '$transferAmt', '$chkingBal','$savingBal')";
-
-                    // This is a try and catch
-                    try{ 
-
-                        // This if statement checks to see if the database and sql was executed, if it was executed it will
-                        // display that the transfer was accepted and show the balance of the accounts to the user
-                        if(mysqli_query($database,$sql)){
-                        
-                            $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                            $mainContent .= "<h2>Great news! <br>Bank transfer has been accepted! </h2>";
-                            $mainContent .= "<h2 style=\"margin-bottom:0px;\"><span style=\"color:red;\">Checking account balance: </span> $$chkingBal <br> <span style=\"color:red;\">Savings account balance: </span>$$savingBal </h2></div>";
-                        }
-
-                    // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
-                    } catch (Exception $e){
-                        $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                        $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
-                    }        
-                } 
-            } 
-  
-           
-        
-            // This if statement will check to see if the checking account balance is less than or equal 
-            // to the transfer funds amount, if it is it will send the user to the error page yo_no_money.php
-            if($chkingBal <= $transferAmt){
-                $mainContent .= "<script> window.location.href = \"http://localhost/banking/yo_no_money.php\"; </script>";
-            }else{
-
-                // This if statement will check to see if the receiving account is the saving account 
-                // and not the sending account is not savings
-                if($toAcct === "saving" && $fromAcct !== "saving"){
-
-                    /* These two lines take the transfer funds amount and deducts it from the checking account 
-                    balance and adds it to the savings account balance */
-                    $chkingBal = $chkingBal - $transferAmt;
-                    $savingBal = $savingBal + $transferAmt;
-                    
-                   // This line is the sql to insert the data into the database table acctBalance
-                    $sql = "INSERT INTO acctBalance(userId,accountName,fromAcct,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$fromAcct','$deposit', '$transferAmt', '$chkingBal','$savingBal')";
-                   
-                    // This is a try and catch
-                    try{ 
-
-                        // This if statement checks to see if the database and sql was executed, if it was executed it will
-                        // display that the transfer was accepted and show the balance of the accounts to the user
-                        if(mysqli_query($database,$sql)){
-                        
-                            $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                            $mainContent .= "<h2>Great news! <br>Bank transfer has been accepted! </h2>";
-                            $mainContent .= "<h2 style=\"margin-bottom:0px;\"><span style=\"color:red;\">Checking account balance:</span> $$chkingBal <br> <span style=\"color:red;\">Savings account balance: </span>$$savingBal</h2></div>";
-                        }
-                       
-                    // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
-                    } catch (Exception $e){
-                        $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                        $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
-                    }
-                }
-            } 
-        }
-    }   
+    // This line calls the function to process the transfer
+    processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId);
+ 
 }
 
 $mainContent .= $transferForm->generateHtml();
 echo generatePage($mainContent);
 ?>
 <script>
+//This function gets called if the user does not have enough money in ther account
 function error(){
     window.location.href = "http://localhost/banking/yo_no_money.php";
 }
