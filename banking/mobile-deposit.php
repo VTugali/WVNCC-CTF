@@ -13,6 +13,8 @@ include "/var/www/html/banking/bankingFunctions.php";
 $mainContent = "";
 $error = "";
 $status = "";
+$cookie_val = $_COOKIE["logged-in-user"];
+$hash = hash('sha256', (string)$cookie_val);
 
 $mobileDepositForm = new SimpleForm(
     name: "Mobile Check Deposit",
@@ -40,6 +42,13 @@ $mobileDepositForm = new SimpleForm(
             name: "amount",
             accessibleName: "Amount",
             isRequired: true
+        ), 
+        new SimpleFormField(
+            type: "hidden",
+            name: "transId",
+            defaultValue: "$hash",
+            accessibleName: "transId",
+            isRequired: true
         ),
          new SimpleFormField(
             type: "hidden",
@@ -61,85 +70,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     $recAcct = $_POST['to-account'];
     $userId = $_COOKIE["logged-in-user"];
     $user = userFromId((int)$userId);
-    $chkingBal = getCheckingBalance($userId);
-    $savingBal = getSavingsBalance($userId);
-
-    $transAmt = 0;
-    $paymentAmt = 0;
+    $ss = $_POST['transId'];
    
-    // This line sets the variable $database to the connectToDatabase function
-    $database = connectToDatabase();
-
-    // This if statement checks to see if the database is not connected and then sends an error message
-    // and closes the connection
-    if(!$database){
-        die ("Connection failed: " .connect->connect_error);
-    } else {
-            
-            /*This if statement will check to see if the receiving account is the checking account, if it is
-              it then takes the mobile deposit amount  and adds it to the checking account balance and stores it in
-              the new variable $newCheckingAccountBalance */
-            if ($recAcct ==  "checking"){
-             
-                $newCheckingAcctBalance = 0;
-
-                $chkingBal = $chkingBal + $mobileDepositAmt;
-                $newCheckingAcctBalance = $newCheckingAcctBalance + $chkingBal;
-
-                $newCheckingBal = sprintf("%.2f", $newCheckingAcctBalance);
-
-                 // This line is the sql to insert the data into the database table acctBalance
-                $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$recAcct', '$mobileDepositAmt','$transAmt','$paymentAmt', '$newCheckingAcctBalance','$savingBal')";
-
-               
-                // This is a try and catch
-                try{ 
-
-                    // This if statement checks to see if the database and sql was executed, if it was executed it will
-                    // display the that the deposit was successful and shows the new checking blance total
-                    if(mysqli_query($database,$sql)){
-                    
-                        $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                        $mainContent .= "<h2>Your deposit to checking has been accepted! <br> Your current <span style=\"color:red;\">checking account </span>balance is : $$newCheckingBal</h2>";
-                        $mainContent .= "</div>";
-                    }
-                // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
-                } catch (Exception $e){
-                    $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                    $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
-                }
-            } 
-            /*This if statement will check to see if the receiving account is the savings account, if it is
-              it then takes the mobile deposit amount  and adds it to the savings account balance and stores it in
-              the new variable $newSavingsAccountBalance */
-            if ($recAcct == "saving"){
-               
-                $newSavingsAcctBalance = 0 ;
-                $savingBal = $savingBal + $mobileDepositAmt;
-                $newSavingsAcctBalance = $newSavingsAcctBalance + $savingBal;
-
-                $newSavingsBal = sprintf("%.2f", $newSavingsAcctBalance);
-                // This line is the sql to insert the data into the database table acctBalance
-                $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$recAcct','$mobileDepositAmt','$transAmt', '$paymentAmt', '$chkingBal','$newSavingsAcctBalance')";
-
-                // This is a try and catch
-                try{ 
-
-                    //This if statement checks to see if the database and sql was executed, if it was executed it will
-                    // display the that the deposit was successful and shows the new savings blance total
-                    if(mysqli_query($database,$sql)){
-                    
-                        $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                        $mainContent .= "<h2 style=\"margin-bottom:0px;\">Your deposit to savings has been accepted! <br> Your current <span style=\"color:red;\">savings account </span>balance is : <br> $ $newSavingsBal</h2>";
-                        $mainContent .= "</div>";
-                    }
-                // This catch will can any exceptions and return the message to the user that an error has occured to the webpage
-                } catch (Exception $e){
-                    $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
-                    $mainContent .= "<h2 style=\"margin-bottom:0;\">Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured with your deposit,<br> please try again!</p></div>";
-                }
-            } 
-    }
+   processMobile($ss,$userId,$mobileDepositAmt,$recAcct); 
 
     // Format Restrictions
     $fileSizeLimitByte = 15000000; // File size is bytes. Equals to 15MB
