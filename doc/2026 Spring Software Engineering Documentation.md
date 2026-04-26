@@ -95,6 +95,8 @@
 
 6. Added code to display all accounts balances in the functions getPendingTransactions($userId) and function getTransactions($userId) function and updated the table content to display transfer amounts, payments, deposits, to and from accounts separately.
 
+7. Added the sqlInjection() function for detecting sql injection for the change-password.php pageto return  the sql success page when the user succesfully enters "SELECT * FROM users" as the new password
+
 
 ## payment.php & paymentAction.php webpages - Coded using the GET form method - in the banking folder
 1. Coded and created the new payments.php and paymentAction.php web pages using GET. In the payments.php page I have left a script that I plan to use for referencing the window location referrer for possible tampering of the data from the GET form action.
@@ -103,3 +105,11 @@
 There are also 4 functions that get the account balances for the checking, savings,mortgage, and dark vault credit balances, which then are also passed in the function payments()
 
 3. The payment page allows payments from savings and checking to the mortgage loan and the dark vault credit accounts and returns the new balances which are shown on the bankTransactions.php webpage.
+
+4. Used Burpsuite on the payment.php and transfer.php pages, a user can intercept payments and transfers and forward new amounts to user's acccounts by changing the user id while being logged in under their own account.
+
+## change-password.php  & sqlSuccess.php webpages
+1. added code the page for checking for mysql exceptions. It will display an error message to the user that the password contains sql injection. It will only display the sqlSuccess.php if the user enters "SELECT * FROM users" sql as the new password where the user recieves the usernames and passwords and a flag for finding the vulnerability.
+
+## testIframe.php webpage - is not linked to the navigation is a test page- located in the banking folder
+1. Created this page with an iframe and the src is pointed at testIframe.php. it displays the entire BTB website inside the iframe and is live and functional.
