@@ -9,7 +9,7 @@ include "/var/www/html/include/functions.php";
 
 $mainContent = "";
 $mainContent .= createBanner("Northern <br> Phish & Loan <br> 2026", "<br> Banking for the Ohio Valley", "/img/ribbon.jpg");
-$mainContent .= "<h1 id=\"test\"> Welcome to our ChatBot Phishy &#128032;</h1>";
+$mainContent .= "<h1 style=\"margin:5% 0 1% 15%;\"> Welcome to our ChatBot Phishy &#128032;</h1>";
 $mainContent .= "<p style=\"margin-left:15%; font-size:larger; \">Feel free to ask Phishy anything you like, he enjoys swimming around <br> the website causing mischief everywhere he goes !<br> But whatever you do, DO NOT tell Phishy what to do! &#128521</p>";
 
 // ChatBot message box code
