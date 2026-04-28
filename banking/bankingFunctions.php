@@ -601,8 +601,6 @@ function sqlInjection(){
 // This function checks the hash value and compares it to catch the 
 // man in the middle attack in the paymentAction.php page
 function processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt){
-    
-    $mainContent = "";
 
     // This if statenment checks to see if the value of $ss equals the  hashed $userId 
     // if they are the same it then calls the function Payments to process the payment transaction
@@ -634,6 +632,9 @@ function processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$trans
 // This function checks the hash value and compares it to catch the 
 // man in the middle attack in the transfer.php page
 function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
+  
+   // This line sets the variable $database to the connectToDatabase function to connect to the database
+    $database = connectToDataBase();
     $mainContent = "";
 
     // This if statement checks to see if the value of $ss equals the  hashed $userId
@@ -643,9 +644,6 @@ function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
         // These lines set the variables to the functions to get the checking and savings account balances
         $chkingBal = getCheckingBalance($userId);
         $savingBal = getSavingsBalance($userId);
-
-        // This line sets the variable $database to the connectToDatabase function
-        $database = connectToDatabase();
 
         // This if statement checks to see if the database is not connected and then sends an error message
         // and closes the connection
@@ -757,6 +755,9 @@ function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
 // This function checks the hash value and compares it to catch the 
 // man in the middle attack in the mobile-deposit.php page
 function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
+
+   // This line sets the variable $database to the connectToDatabase function to connect to the database
+    $database = connectToDataBase();
     $mainContent = "";
 
     // These lines set the variables to the functions to get the checking and savings account balances
@@ -769,9 +770,6 @@ function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
         
         $transAmt = 0;
         $paymentAmt = 0;
-    
-        // This line sets the variable $database to the connectToDatabase function
-        $database = connectToDatabase();
 
         // This if statement checks to see if the database is not connected and then sends an error message
         // and closes the connection
