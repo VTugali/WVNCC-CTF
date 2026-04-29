@@ -78,6 +78,9 @@ include "/var/www/html/banking/bankingFunctions.php";
             $mainContent .= "<div style=\"margin-left:26%; margin-bottom:10%;\"><img src=\"/img/registerError.gif\" width=\"500px\"; height=\"500px\";></div>"; 
         }
     }
+       // This line closes the database connection
+    mysqli_close($database1);
+    mysqli_close($database2);
 } 
 
 // This line displays the content on the webpage by calling the function generatePage()
