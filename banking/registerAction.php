@@ -42,22 +42,23 @@ include "/var/www/html/banking/bankingFunctions.php";
     } else {
 
 
-        // This line is the query1 to insert the data into the database1 table acctBalance
-        $query1 = "INSERT INTO users(username, password, firstName, lastName, email, isAdmin) VALUES ('$username', '$password','$firstname', '$lastname', '$email', False)";
-        mysqli_query($database1, $query1);
-        $newId = mysqli_insert_id($database1); // Gets the newly generated user ID
-
-        // These lines set the variable names to the functions in the bankingFunctions.php page
-        // to get the  morgage and darkvault cedit account starting balances to enter into the database
-        $dkvBal  = getDkStartBalance($newId);
-        $mgBal = getMgStartBalance($newId);  
-
-        // This line is the query2 to insert the data into the database2 table loanBalance
-        $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct,paymentAmount,morgageBalance, darkVaultBalance) VALUES('$newId', '$toAcct', '$fromAcct','$paymentAmt','$mgBal','$dkvBal')";    
-        mysqli_query($database2, $query2);
-
         // This is a try and catch
         try{ 
+
+                // This line is the query1 to insert the data into the database1 table acctBalance
+            $query1 = "INSERT INTO users(username, password, firstName, lastName, email, isAdmin) VALUES ('$username', '$password','$firstname', '$lastname', '$email', False)";
+            mysqli_query($database1, $query1);
+            $newId = mysqli_insert_id($database1); // Gets the newly generated user ID
+    
+            // These lines set the variable names to the functions in the bankingFunctions.php page
+            // to get the  morgage and darkvault cedit account starting balances to enter into the database
+            $dkvBal  = getDkStartBalance($newId);
+            $mgBal = getMgStartBalance($newId);  
+    
+            // This line is the query2 to insert the data into the database2 table loanBalance
+            $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct,paymentAmount,morgageBalance, darkVaultBalance) VALUES('$newId', '$toAcct', '$fromAcct','$paymentAmt','$mgBal','$dkvBal')";    
+            mysqli_query($database2, $query2);
+
 
             // This if statement checks to see if the database2 and query2 was executed, if it was executed
             //  it will display  the html content that the customer account has been created 
