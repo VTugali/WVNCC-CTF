@@ -15,7 +15,7 @@ $error = "";
 $status = "";
 $cookie_val = $_COOKIE["logged-in-user"];
 $hash = hash('sha256', (string)$cookie_val);
-
+$result = "";
 $mobileDepositForm = new SimpleForm(
     name: "Mobile Check Deposit",
     fields: array(
@@ -72,7 +72,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     $user = userFromId((int)$userId);
     $ss = $_POST['transId'];
    
-   processMobile($ss,$userId,$mobileDepositAmt,$recAcct); 
+   $result = processMobile($ss,$userId,$mobileDepositAmt,$recAcct); 
 
     // Format Restrictions
     $fileSizeLimitByte = 15000000; // File size is bytes. Equals to 15MB
@@ -121,6 +121,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 if($status) {
     $mobileDepositForm->instructions .= "<p>$status</p>";
 }
+$mainContent.= $result;
 $mainContent .= $mobileDepositForm->generateHtml();
 echo generatePage($mainContent);
     

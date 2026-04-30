@@ -601,6 +601,8 @@ function sqlInjection(){
 // This function checks the hash value and compares it to catch the 
 // man in the middle attack in the paymentAction.php page
 function processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt){
+    
+    $mainContent = "";
 
     // This if statenment checks to see if the value of $ss equals the  hashed $userId 
     // if they are the same it then calls the function Payments to process the payment transaction
@@ -632,10 +634,10 @@ function processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$trans
 // This function checks the hash value and compares it to catch the 
 // man in the middle attack in the transfer.php page
 function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
-  
-   // This line sets the variable $database to the connectToDatabase function to connect to the database
-    $database = connectToDataBase();
     $mainContent = "";
+
+    // This line sets the variable $database to the connectToDatabase function
+    $database = connectToDatabase();
 
     // This if statement checks to see if the value of $ss equals the  hashed $userId
     // if they are the same it then it will connect to the database and process the transfer transaction
@@ -745,6 +747,7 @@ function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
         $mainContent .= "<body style=\"background-color:C0112F\"><div style=\"background-color:#F0F8FF; border: 2px solid black;  margin:5% 15% 2% 15%;\" >";
         $mainContent .= "<h1 style=\"margin:5% 0 1% 15%;\"> Hmm &#129300; not sly enough! Man in the Middle! <br> You have been caught red handed!! <img src=\"/img/hacker.jpg\" style=\"margin:1% 10% ;width:250px; height:250px;\"><br> Lol, you still capture a Flag for your efforts!! &#128681; </h2>";
         $mainContent .= "<p style=\"margin-left:16%; font-size:x-large; \"> <br> Continue on with your website mischief !! &#128521</p></div>"; 
+    
     }
     // This line closes the database connection
     mysqli_close($database);
@@ -756,8 +759,8 @@ function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
 // man in the middle attack in the mobile-deposit.php page
 function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
 
-   // This line sets the variable $database to the connectToDatabase function to connect to the database
-    $database = connectToDataBase();
+    // This line sets the variable $database to the connectToDatabase function
+    $database = connectToDatabase();
     $mainContent = "";
 
     // These lines set the variables to the functions to get the checking and savings account balances
@@ -776,11 +779,15 @@ function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
         if(!$database){
             die ("Connection failed: " .connect->connect_error);
         } else {
-                
+                if ($mobileDepositAmt < 0){
+                    $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                    $mainContent .= "<h2>Sorry deposit amount can not be a negative number!</h2>";
+                    $mainContent .= "</div>";
+                }
                 /*This if statement will check to see if the receiving account is the checking account, if it is
                 it then takes the mobile deposit amount  and adds it to the checking account balance and stores it in
                 the new variable $newCheckingAccountBalance */
-                if ($recAcct ==  "checking"){
+                if ($recAcct ==  "checking" && $mobileDepositAmt > 0){
                 
                     $newCheckingAcctBalance = 0;
 
@@ -813,7 +820,7 @@ function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
                 /*This if statement will check to see if the receiving account is the savings account, if it is
                 it then takes the mobile deposit amount  and adds it to the savings account balance and stores it in
                 the new variable $newSavingsAccountBalance */
-                if ($recAcct == "saving"){
+                if ($recAcct == "saving" && $mobileDepositAmt > 0){
                 
                     $newSavingsAcctBalance = 0 ;
                     $savingBal = $savingBal + $mobileDepositAmt;
@@ -854,7 +861,7 @@ function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
     // This line closes the database connection
     mysqli_close($database);
 
-    echo generatePage($mainContent);
+    return $mainContent;
 }
 ?>
 
