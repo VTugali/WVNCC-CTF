@@ -323,9 +323,19 @@ $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
             die ("Connection Failed".$database1->connect_error);
             die ("Connection Failed".$database2->connect_error);
         } else {
-               
+
+                // This if statement checks to see if the payment is a negative amount and displays the 
+                // error message to the user
+               if ($paymentAmt < 0){
+                    $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                    $mainContent .= "<script>alert(\"Sorry we could not process your payment. Your payment amount must be a postive number!\")</script>";
+                    $mainContent .= "</div>";
+                    $mainContent .= "<script> window.location = \"payments.php\"</script>";
+                
+               }
+
             // This is the if statement to check to see if the from account is the checking account
-            if ($frAcct == "checking"){
+            if ($frAcct == "checking" && $paymentAmt > 0){
                 // This if statement checks to see if the to account is morgage
                 if ($toAcct == "morgage"){
 
@@ -438,7 +448,7 @@ $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
                 }
             }
             // This is the if statement to check to see if the from account is the saving account
-            if ($frAcct == "saving"){
+            if ($frAcct == "saving" && $paymentAmt > 0){
                 // This if statement checks to see if the to account is morgage
                 if ($toAcct == "morgage"){
 
@@ -578,23 +588,29 @@ function sqlInjection(){
     if(mysqli_num_rows($result) > 0){
 
         // sucessful sql injection message to display to the user
+        $mainContent .= "<div role=\"presentation\">";
         $mainContent .= "<h2 style=\"margin: 5% 0 0 30%;\">Ok, Ninja Hacker! &#129315;<br> You have sucessfully used sql injection! &#128681 </h2>";
-        $mainContent .= "<table id=\"meet-our-team\">";
+        $mainContent .= "<table style=\"background-color:red; border: 1px solid black; width:750px;text-align:center;\">";
         
         // Thsi while loop will fetch the results and stores them in the variable names for the webpage display inside a table to the user in $mainContent
         while($row = mysqli_fetch_assoc($result)){
             $userName = $row["username"];
             $userPassword = $row["password"];
-            $mainContent .= "<tr><td> $userName</td><td>$userPassword</td></tr>";
+
+            // These 2 lines hash the database information so the hacker may get the info 
+            // but it's hashed and they can not use it LOL!
+            $hashUN = hash('sha256', (string)$userName);
+            $hashUP = hash('sha256', (string)$userPassword);
+            $mainContent .= "<tr><td> $hashUN &emsp; $hashUP</td></tr>";
           
         }
         // end of html table element
-        $mainContent .= "</table>";
+        $mainContent .= "</table></div>";
 
         // This line closes the database connection
         mysqli_close($database);
         // returns the html maincontent to display to the user
-        return ($mainContent);
+        echo generatePage($mainContent);
     }
 }
  
@@ -604,7 +620,7 @@ function processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$trans
     
     $mainContent = "";
 
-    // This if statenment checks to see if the value of $ss equals the  hashed $userId 
+    // This if statenment checks to see if the value of $ss equals the  hashed $userId value 
     // if they are the same it then calls the function Payments to process the payment transaction
     if (hash_equals($ss, hash('sha256', (string)$userId))) {
 
@@ -617,7 +633,7 @@ function processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$trans
 
         //  This line calls the payments function
         payments($userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt,$chkingBal, $savingBal,$mgBal,$dkvBal);
-    
+               
     // This else activates if the hashed values are not the same indicating man in the middle attack
     //  and will display a message to the attacker that they have been caught and receive a flag 
     // for their efforts
@@ -653,11 +669,23 @@ function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
             die ("Connection failed: " .connect->connect_error);
         } else {
                 $deposit = 0.001;
+                 
             // This if statement is to display an error message to the user if the transfer funds receiving
             // and sending accounts are the same
             if ($toAcct === "saving" && $fromAcct == "saving" || $toAcct === "checking" && $fromAcct == "checking") {
                 $mainContent .= "<div class=\"single-column\" role=\"presentation\"><h2 style=\"color:red;margin:0;\"> Error message: <br> An error has occured processing your funds Transfer</h2><br><h3> Please make sure the sending and receiving accounts are not the same!</h3></div>";
-            } else {                
+            } else {  
+
+                 
+                // This if statement checks to see if the transfer amount is a negative amount and displays the 
+                // error message to the user   
+                if ($transferAmt < 0){
+                        $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
+                        $mainContent .= "<script>alert(\"Sorry we could not process your transfer. Transfer amount must be a postive number!\")</script>";
+                        $mainContent .= "</div>";
+                        $mainContent .= "<script> window.location = \"transfer.php\"</script>";  
+                }
+
                 // This if statement will check to see if the savings account balance is less than 
                 // or equal to the transfer funds amount, if it is it will send the user to the error 
                 // page yo_no_money.php with a funny gif character
@@ -779,11 +807,15 @@ function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
         if(!$database){
             die ("Connection failed: " .connect->connect_error);
         } else {
+
+                // This if statement checks to see if the deposit amounts is a negative amount 
+                // and displays the eroor message to the user
                 if ($mobileDepositAmt < 0){
                     $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
                     $mainContent .= "<h2>Sorry deposit amount can not be a negative number!</h2>";
                     $mainContent .= "</div>";
                 }
+                
                 /*This if statement will check to see if the receiving account is the checking account, if it is
                 it then takes the mobile deposit amount  and adds it to the checking account balance and stores it in
                 the new variable $newCheckingAccountBalance */
