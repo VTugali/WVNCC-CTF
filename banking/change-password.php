@@ -39,9 +39,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         if (str_contains($newPassword ,"SELECT * FROM users")){
             $mainContent .= "<script>window.location = \"http://localhost/banking/sqlSuccess.php\" </script>";
         }
+      
+        $newPassword = strtolower($newPassword);
 
-        if($passwordIsCorrect && $passwordsMatch) {
-            
+        if($passwordIsCorrect && $passwordsMatch && !str_contains($newPassword,"delete") && !str_contains($newPassword,"update")&& !str_contains($newPassword,"insert")&& !str_contains($newPassword,"select")){
+             
             // This is a try and catch
             try{
                 // This line is the query to update the users password
@@ -50,14 +52,17 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 // The html content that displays the password change was sucessful
                 $mainContent .= "<h2 style=\"margin: 5% 0 0 30%;\"> Your password has now been changed</h2>";
 
-            // This catches any sql exception and displays the html error message below to the user
+            // This catches any sql beginning with quotations exception and displays the html error message below to the user
             } catch (Exception $e){
                 $mainContent .= "<h2 style=\"margin: 5% 0 0 30%;\"> <br> Nice try there Slick!! &#128514; <br> Your password contains sql injection!</h2>";
         
             }
+                 
         } else {
             
+         $mainContent .= "<h2 style=\"margin: 5% 0 0 30%;\"> <br> Nice try there Slick!! &#128514; <br> Your password contains sql injection!</h2>";
         }
+        
     } else {
         header("Location: /banking/login.php");
     }
