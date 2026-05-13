@@ -11,7 +11,7 @@ session_start();
 include "/var/www/html/include/functions.php";
 
 $mainContent = "";
-$mainContent .= createBanner("Northern Phish & Loan <br> Fun Facts about our Team", "<br> Banking for the Ohio Valley", "/img/ribbon.jpg");
-$mainContent .= "<h1 id=\"test\"> Northern Phish & Loan Team Information</h1>";
+$mainContent .= createBanner("Northern Phish & Loan <br> Fun Facts about our Team", "<br> Banking for the Ohio Valley", "/img/bank.webp");
+$mainContent .= "<h1 style=\"margin:15px;\">  Northern Phish & Loan Team Information</h1>";
 $mainContent .= "<div style=\"margin-left:20%;padding:1%;\"><button type=\"button\" style=\"background-color:transparent;color:black;\">Click Here !!<br><img src=\"/img/redButton.webp\" width=\"95px\"; height=\"95px\";></button><img src=\"/img/dee_dee_meme.webp\" style=\"max-wdith:300px; max-height:300px; margin-left:8%; display:inline;\"></div>";
 echo generatePage($mainContent);
