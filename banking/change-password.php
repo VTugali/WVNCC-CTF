@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
       
         $newPassword = strtolower($newPassword);
 
-        if($passwordIsCorrect && $passwordsMatch && !str_contains($newPassword,"delete") && !str_contains($newPassword,"update")&& !str_contains($newPassword,"insert")&& !str_contains($newPassword,"select")){
+        if($passwordIsCorrect && $passwordsMatch && !str_contains($newPassword,"delete") && !str_contains($newPassword,"update")&& !str_contains($newPassword,"insert")&& !str_contains($newPassword,"select") && !str_contains($newPassword,"\"")){
              
             // This is a try and catch
             try{
