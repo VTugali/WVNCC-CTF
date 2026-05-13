@@ -87,7 +87,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     }
 //if accessed through changing the url rather than submitting the "learn more about nixon" form
 } else {
-    $mainContent .= "<p>You aren't supposed to be here yet.</p>";
+    $mainContent .= "<h3 style=\"font-size:20px;\">You aren't supposed to be here yet! <br>You used url tampering to get here and capture a Flag !! &#128681; <br> Now Go back and do it the right way lol! &#129315;</h3><img src=\"/img/rock.jpg\" width=\"350px\"; height=\"350px\"/>";
 }
 
 echo generatePage(singleColumnLayout($mainContent));
