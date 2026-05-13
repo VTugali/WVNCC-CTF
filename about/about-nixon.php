@@ -47,27 +47,27 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                     $mainContent .= "<p>Richard Nixon Facts: He existed. He also knows you successfully pulled off CSRF. Don't ask how he does.</p>";
                 } catch (mysqli_sql_exception $error){
                     //all variables were found but the hacker hasn't figured out quite what to put
-                    $mainContent .= "<img src=\"img/this-is-fine.png\"/>";
+                    $mainContent .= "<img src=\"/img/this-is-fine.png\"/>";
                     $mainContent .= "<p>Comic by KC Green</p>";
                     $mainContent .= "<p>$error</p>";
                 }
             }
         //all of these are just for if the hackers miss one or more needed variables
         } elseif(($_POST["changing-user-info"] == "") && ($_POST["new-info-value"] == "")){
-            $mainContent .= "<img src=\"img/this-is-fine.png\"/>";
+            $mainContent .= "<img src=\"/img/this-is-fine.png\"/>";
             $mainContent .= "<p>Comic by KC Green</p>";
             $mainContent .= "<p>SQL Error: Missing values</p>";
         } elseif($_POST["new-info-value"] == ""){
-            $mainContent .= "<img src=\"img/this-is-fine.png\"/>";
+            $mainContent .= "<img src=\"/img/this-is-fine.png\"/>";
             $mainContent .= "<p>Comic by KC Green</p>";
             $mainContent .= "<p>SQL Error: Empty value</p>";
         } elseif($_POST["changing-user-info"] == ""){
-            $mainContent .= "<img src=\"img/this-is-fine.png\"/>";
+            $mainContent .= "<img src=\"/img/this-is-fine.png\"/>";
             $mainContent .= "<p>Comic by KC Green</p>";
             $mainContent .= "<p>SQL Error: Empty column</p>";
         //all variables get missed
         } else {
-            $mainContent .= "<img src=\"img/this-is-fine.png\"/>";
+            $mainContent .= "<img src=\"/img/this-is-fine.png\"/>";
             $mainContent .= "<p>Comic by KC Green</p>";
             $mainContent .= "<p class=\"hidden-search\">CSRF Vulnerability Must Be Fixed</p>";
             $mainContent .= $junkErrorMessage;
@@ -76,7 +76,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     } else {
         $mainContent .= "<p>ERROR: BROKEN PAGE. Full error message below!</p>";
         $mainContent .= "<p>Possible vulnerabilities we need to fix up right away! Our clients depend on us!</p>";
-        $mainContent .= "<img src=\"img/this-is-fine.png\"/>";
+        $mainContent .= "<img src=\"/img/this-is-fine.png\"/>";
         $mainContent .= "<p>Comic by KC Green</p>";
         $mainContent .= "<p>DO NOT BE LIKE THIS DOG!</p>";
         $mainContent .= "<p>This is urgent!</p>";
