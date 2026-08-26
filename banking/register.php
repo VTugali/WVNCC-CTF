@@ -9,7 +9,7 @@
 session_start();
 // These two line include the files for the functions for this page to call to be used
 include "/var/www/html/include/functions.php";
-include "/var/www/html/banking/bankingFunctions.php";
+include_once "/var/www/html/banking/bankingFunctions.php";
 $mainContent = "";
 
 // This is the code to create the registration form on register.php webpage

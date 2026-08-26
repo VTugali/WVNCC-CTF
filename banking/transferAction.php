@@ -3,12 +3,12 @@
 session_start();
 // These two line include the files for the functions for this page to call to be used
 include "/var/www/html/include/functions.php";
-include "/var/www/html/banking/bankingFunctions.php";
+include_once "/var/www/html/banking/bankingFunctions.php";
 
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
 
-     // These lines get the information from the user in the tranfer form and store the value in the $variableNames
+    // These lines get the information from the user in the transfer web page form and store the value in the $variableNames
     $transferAmt = $_POST['amount'];
     $toAcct = $_POST['to-account'];
     $fromAcct = $_POST['from-account'];
@@ -16,6 +16,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     //These two lines get the user id from the cookie of the logged in user
     $userId = $_COOKIE["logged-in-user"];
     $user = userFromId((int)$userId);
+
+    // secret if that is hashed in the function processTransfer()
     $ss = $_POST['transId'];
 
     // This line calls the function to process the transfer

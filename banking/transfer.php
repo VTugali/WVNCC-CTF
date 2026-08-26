@@ -5,7 +5,7 @@
 
 session_start();
 include "/var/www/html/include/functions.php";
-include "/var/www/html/banking/bankingFunctions.php";
+include_once "/var/www/html/banking/bankingFunctions.php";
 
 $mainContent = "";
 $cookie_val = $_COOKIE["logged-in-user"];

@@ -12,6 +12,7 @@ if(isLoggedIn()) {
     $leftColumn = "";
     $rightColumn = "";
     $leftColumn .= "<div class=\"account-card-container\">";
+   
     $leftColumn .= "<h2>Hello, ".$user->firstName."!</h2>";
     $accounts = bankAccountsFromUser(getCurrentUser()->userId);
     if($accounts) {
