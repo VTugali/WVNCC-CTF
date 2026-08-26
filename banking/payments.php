@@ -8,16 +8,15 @@
 session_start();
 // These two line include the files for the functions for this page to call to be used
 include "/var/www/html/include/functions.php";
-include "/var/www/html/banking/bankingFunctions.php";
+include_once "/var/www/html/banking/bankingFunctions.php";
  
-
-// These lines are the code to create the payments form on payments.php webpage
 $mainContent = "";
 $info = "";
 $error ="";
 $cookie_val = $_COOKIE["logged-in-user"];
 $hash = hash('sha256', (string)$cookie_val);
 
+// These lines are the code to create the payments form on payments.php webpage
 $mainContent .= "<div  style=\" margin: 5% 0 5% 38%; border: 1px solid black;background-color:#c41230; max-width:300px; role=\"presentation\"><h2 style=\"color:white;text-align:center;\">Payments</h2>";
 $mainContent .= "<div style=\"background-color:#f0f8ff; margin:5% 0 0 0;\" >
 <p style=\"margin:15px;\">Fill the following form to submit your Northern Phish &amp; Loan payment for your Morgage or Dark Vault Credit accounts.</p>

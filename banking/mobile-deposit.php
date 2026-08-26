@@ -8,7 +8,8 @@
 
 session_start();
 include "/var/www/html/include/functions.php";
-include "/var/www/html/banking/bankingFunctions.php";
+include_once "/var/www/html/banking/bankingFunctions.php";
+
 
 $mainContent = "";
 $error = "";
@@ -16,6 +17,7 @@ $status = "";
 $cookie_val = $_COOKIE["logged-in-user"];
 $hash = hash('sha256', (string)$cookie_val);
 $result = "";
+
 $mobileDepositForm = new SimpleForm(
     name: "Mobile Check Deposit",
     fields: array(
@@ -72,9 +74,19 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     $user = userFromId((int)$userId);
     $ss = $_POST['transId'];
    
-   $result = processMobile($ss,$userId,$mobileDepositAmt,$recAcct); 
-
-    // Format Restrictions
+   
+    // these lines set the description, transtime and posetd Time for the mobile deposit
+    // webpage
+    $description = "Deposit";
+    $transTime = date('Y-m-d');
+    $postDate = date('Y-m-d');
+    
+    // This line sets the processMbbile() function to the variable $result to be display to the user
+    // at the bottom of this file line 135
+    $result = processMobile($ss,$userId,$mobileDepositAmt,$recAcct,$transTime,$postDate,$description); 
+   
+   
+   // Format Restrictions
     $fileSizeLimitByte = 15000000; // File size is bytes. Equals to 15MB
     $maxFileSize = 50000000; // File size is bytes. Equals to 50MB
     $fileSizeLimitMB = $fileSizeLimitByte / 1000000;

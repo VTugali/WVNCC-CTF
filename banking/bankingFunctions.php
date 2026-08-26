@@ -310,7 +310,9 @@ function payments($userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt,$ch
 $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
 
     $mainContent = "";
-
+    $description = "Payment";
+    $transTime = date('Y-m-d');
+    $postedTime = date('Y-m-d');
    
         //This line sets the variable $database1 and datbase2 to the connectToDatabase function to connect
         // to the database for two different database insertions
@@ -354,11 +356,11 @@ $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
                         if ($mgBal >= 0.00){
                           
                             // This line is the query1 to insert the data into the database1 table acctBalance
-                            $query1 = "INSERT INTO acctBalance(userId,accountName,fromAcct, depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$frAcct','$deposit', '$transferAmt','$paymentAmt', '$chkingBal','$savingBal')";
+                            $query1 = "INSERT INTO acctBalance(userId,accountName,fromAcct, depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance, transactionTime,postedTime,description) VALUES('$userId','$toAcct','$frAcct','$deposit', '$transferAmt','$paymentAmt', '$chkingBal','$savingBal','$transTime','$postedTime','$description')";
                             mysqli_query($database1, $query1);
                             
                             // This line is the query2 to insert the data into the database2 table loanBalance
-                            $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct, paymentAmount,morgageBalance, darkVaultBalance) VALUES('$userId', '$toAcct', '$frAcct', '$paymentAmt','$mgBal','$dkvBal')";    
+                            $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct, paymentAmount,morgageBalance, darkVaultBalance,transactionTime,postedTime,description) VALUES('$userId', '$toAcct', '$frAcct', '$paymentAmt','$mgBal','$dkvBal','$transTime','$postedTime','$description')";    
                             mysqli_query($database2, $query2);
 
                             // This is a try and catch
@@ -410,11 +412,11 @@ $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
                             if ($dkvBal >= 0.00){
                                
                                 // This line is the query1 to insert the data into the database1 table acctBalance
-                                $query1 = "INSERT INTO acctBalance(userId,accountName,fromAcct, depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$frAcct','$deposit', '$transferAmt','$paymentAmt', '$chkingBal','$savingBal')";
+                                $query1 = "INSERT INTO acctBalance(userId,accountName,fromAcct, depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance,transactionTime,postedTime,description) VALUES('$userId','$toAcct','$frAcct','$deposit', '$transferAmt','$paymentAmt', '$chkingBal','$savingBal','$transTime','$postedTime','$description')";
                                 mysqli_query($database1, $query1);
                                 
                                 // This line is the query2 to insert the data into the database2 table loanBalance
-                                $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct, paymentAmount,morgageBalance, darkVaultBalance) VALUES('$userId', '$toAcct', '$frAcct', '$paymentAmt','$mgBal','$dkvBal')";    
+                                $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct, paymentAmount,morgageBalance, darkVaultBalance,transactionTime,postedTime,description) VALUES('$userId', '$toAcct', '$frAcct', '$paymentAmt','$mgBal','$dkvBal' ,'$transTime','$postedTime','$description')"; 
                                 mysqli_query($database2, $query2);
                                 
                                 // This is a try and catch
@@ -467,11 +469,11 @@ $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
                         if ($mgBal >= 0.00){
                           
                              // This line is the query1 to insert the data into the database1 table acctBalance
-                            $query1 = "INSERT INTO acctBalance(userId,accountName,fromAcct, depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$frAcct','$deposit', '$transferAmt','$paymentAmt', '$chkingBal','$savingBal')";
+                            $query1 = "INSERT INTO acctBalance(userId,accountName,fromAcct, depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance,transactionTime,postedTime,description) VALUES('$userId','$toAcct','$frAcct','$deposit', '$transferAmt','$paymentAmt', '$chkingBal','$savingBal','$transTime','$postedTime','$description')";
                             mysqli_query($database1, $query1);
 
                             // This line is the query2 to insert the data into the database2 table loanBalance
-                            $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct, paymentAmount,morgageBalance, darkVaultBalance) VALUES('$userId', '$toAcct', '$frAcct', '$paymentAmt','$mgBal','$dkvBal')";    
+                            $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct, paymentAmount,morgageBalance, darkVaultBalance,transactionTime,postedTime,description) VALUES('$userId', '$toAcct', '$frAcct', '$paymentAmt','$mgBal','$dkvBal' ,'$transTime','$postedTime','$description')";   
                             mysqli_query($database2, $query2);
 
                             // This is a try and catch
@@ -521,11 +523,11 @@ $paymentAmtFmt = sprintf("%.2f", $paymentAmt);
                             if ($dkvBal >= 0.00){
 
                                 // This line is the query1 to insert the data into the database1 table acctBalance
-                                $query1 = "INSERT INTO acctBalance(userId,accountName,fromAcct, depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$frAcct','$deposit', '$transferAmt','$paymentAmt', '$chkingBal','$savingBal')";
+                                $query1 = "INSERT INTO acctBalance(userId,accountName,fromAcct, depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance,transactionTime,postedTime,description) VALUES('$userId','$toAcct','$frAcct','$deposit', '$transferAmt','$paymentAmt', '$chkingBal','$savingBal','$transTime','$postedTime','$description')";
                                 mysqli_query($database1, $query1);           
 
                                 // This line is the query2 to insert the data into the database2 table loanBalance
-                                $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct, paymentAmount,morgageBalance, darkVaultBalance) VALUES('$userId', '$toAcct', '$frAcct', '$paymentAmt','$mgBal','$dkvBal')";    
+                                $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct, paymentAmount,morgageBalance, darkVaultBalance,transactionTime,postedTime,description) VALUES('$userId', '$toAcct', '$frAcct', '$paymentAmt','$mgBal','$dkvBal','$transTime','$postedTime','$description')";  
                                 mysqli_query($database2, $query2);
 
                                 // This is a try and catch
@@ -617,8 +619,11 @@ function sqlInjection(){
 // This function checks the hash value and compares it to catch the 
 // man in the middle attack in the paymentAction.php page
 function processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$transferAmt){
-    
+
     $mainContent = "";
+    $description = "Transfer";
+    $transTime = date('Y-m-d');
+    $postedTime = date('Y-m-d');
 
     // This if statenment checks to see if the value of $ss equals the  hashed $userId value 
     // if they are the same it then calls the function Payments to process the payment transaction
@@ -650,7 +655,11 @@ function processPayment($ss,$userId,$frAcct, $toAcct,$paymentAmt,$deposit,$trans
 // This function checks the hash value and compares it to catch the 
 // man in the middle attack in the transfer.php page
 function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
+
     $mainContent = "";
+    $description = "Transfer";
+    $transTime = date('Y-m-d');
+    $postedTime = date('Y-m-d');
 
     // This line sets the variable $database to the connectToDatabase function
     $database = connectToDatabase();
@@ -704,7 +713,7 @@ function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
                         $chkingBal = $chkingBal + $transferAmt;
                         
                         // This line is the sql to insert the data into the database table acctBalance
-                        $sql = "INSERT INTO acctBalance(userId,accountName,fromAcct,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$fromAcct','$deposit', '$transferAmt', '$chkingBal','$savingBal')";
+                        $sql = "INSERT INTO acctBalance(userId,accountName,fromAcct,depositAmount,transferAmount,checkingBalance, savingsBalance,transactionTime,postedTime,description) VALUES('$userId','$toAcct','$fromAcct','$deposit', '$transferAmt', '$chkingBal','$savingBal','$transTime','$postedTime','$description')";
 
                         // This is a try and catch
                         try{ 
@@ -743,7 +752,7 @@ function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
                         $savingBal = $savingBal + $transferAmt;
                         
                     // This line is the sql to insert the data into the database table acctBalance
-                        $sql = "INSERT INTO acctBalance(userId,accountName,fromAcct,depositAmount,transferAmount,checkingBalance, savingsBalance) VALUES('$userId','$toAcct','$fromAcct','$deposit', '$transferAmt', '$chkingBal','$savingBal')";
+                        $sql = "INSERT INTO acctBalance(userId,accountName,fromAcct,depositAmount,transferAmount,checkingBalance, savingsBalance,transactionTime,postedTime,description) VALUES('$userId','$toAcct','$fromAcct','$deposit', '$transferAmt', '$chkingBal','$savingBal','$transTime','$postedTime','$description')";
                     
                         // This is a try and catch
                         try{ 
@@ -785,7 +794,7 @@ function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
 
 // This function checks the hash value and compares it to catch the 
 // man in the middle attack in the mobile-deposit.php page
-function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
+function processMobile($ss,$userId,$mobileDepositAmt,$recAcct,$transTime,$postDate,$description){
 
     // This line sets the variable $database to the connectToDatabase function
     $database = connectToDatabase();
@@ -794,6 +803,10 @@ function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
     // These lines set the variables to the functions to get the checking and savings account balances
     $chkingBal = getCheckingBalance($userId);
     $savingBal = getSavingsBalance($userId);
+
+    $description = "Deposit";
+    $transTime = date('Y-m-d');
+    $postedTime = date('Y-m-d');
 
     // This if statement checks to see if the value of $ss equals the  hashed $userId
     // if they are the same it then it will connect to the database and process the transfer transaction
@@ -829,7 +842,7 @@ function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
                     $newCheckingBal = sprintf("%.2f", $newCheckingAcctBalance);
 
                     // This line is the sql to insert the data into the database table acctBalance
-                    $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$recAcct', '$mobileDepositAmt','$transAmt','$paymentAmt', '$newCheckingAcctBalance','$savingBal')";
+                    $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance,transactionTime,postedTime,description) VALUES('$userId','$recAcct', '$mobileDepositAmt','$transAmt','$paymentAmt', '$newCheckingAcctBalance','$savingBal','$transTime','$postedTime','$description')";
 
                 
                     // This is a try and catch
@@ -860,8 +873,8 @@ function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
 
                     $newSavingsBal = sprintf("%.2f", $newSavingsAcctBalance);
                     // This line is the sql to insert the data into the database table acctBalance
-                    $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance) VALUES('$userId','$recAcct','$mobileDepositAmt','$transAmt', '$paymentAmt', '$chkingBal','$newSavingsAcctBalance')";
-
+                    $sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance,transactionTime,postedTime,description) VALUES('$userId','$recAcct','$mobileDepositAmt','$transAmt', '$paymentAmt', '$chkingBal','$newSavingsAcctBalance','$transTime','$postedTime','$description')";
+                    //$sql = "INSERT INTO acctBalance(userId,accountName,depositAmount,transferAmount,paymentAmt,checkingBalance, savingsBalance,transactionTime,postedTime,description) VALUES('$userId','$recAcct', '$mobileDepositAmt','$transAmt','$paymentAmt', '$newCheckingAcctBalance','$savingBal','$transTime','$postedTime','$description')";
                     // This is a try and catch
                     try{ 
 
@@ -895,6 +908,185 @@ function processMobile($ss,$userId,$mobileDepositAmt,$recAcct){
 
     return $mainContent;
 }
+
+//This function gets all the account balances by user id and the account type 
+// and returns the balance based on the account type for the dashboard webpage
+function getAccountBalance($accountType,$userId){ 
+$chkingBal = getCheckingBalance($userId);
+$savingBal = getSavingsBalance($userId);
+$dkBal = getDkvBalance($userId);
+$mgBal = getMgBalance($userId);
+
+    switch ($accountType){
+        case "Dark Vault Credit":
+            return $dkBal;
+        case "Morgage":
+            return $mgBal;
+        case "Checking":
+            return $chkingBal;
+        case "Saving":
+            return $savingBal;
+        default:
+            return 0.00;
+    }
+}
+
+
+
+// Function to get the separate transactions for the dashboard transaction page from the database for the user by user ID
+function getSepTransactions($userId,$type){
+
+    // These two lines get the current morgage and loan balances
+    $dkvBal = getDKVStartBal($userId); 
+    $mgBal = getMGStartBal($userId);
+
+    //These two lines set the beginning morgage and loan balances
+    $startMgBal = "$mgBal";
+    $startdkvBal = "$dkvBal";
+
+  // This line sets the variable $database to the connectToDatabase function to connect to the database
+    $database = connectToDataBase();
+
+    // This line sets the variable $name to the function that gets the logged in user's first and 
+    // last name by userid
+    $name = getUserName($userId);
+
+    // These two lines set the query to get the information from the acctBalance table in the database
+    // by the user id number by transactionId and limits the amount of records to 25
+    $query = "SELECT * FROM acctBalance WHERE userId = $userId ORDER BY transactionId  LIMIT 25 ";
+    $result = mysqli_query($database,$query);
+
+    
+    $mainContent = "";
+   
+    // This if statment checks to see if there is any result in the database    
+    if(mysqli_num_rows($result) > 0){
+
+    // These ines create the html table to be displayed to the user
+    $mainContent .= "<table>";
+    $mainContent .= "<thead>";
+    $mainContent .= "<tr><th>Date</th><th>Start Balance</th><th>Description</th><th>Account</th><th>Deposit</th><th>Transfer</th><th>Payment</th><th>Balance</th></tr>";
+    $mainContent .= "</thread>";
+    $mainContent .= "<tbody>";
+
+  
+        // Then this while statement loops through the data in the database and returns the data
+        // and stores it in the variable names and dislay the transactions and the account balances 
+        // in the variable $mainContent to display to the user     
+        while($row = mysqli_fetch_assoc($result)){
+            $toAcct = $row['accountName'];
+            $fromAcct = $row['fromAcct'];
+            $ckBal = $row['checkingBalance'];
+            $transAmt = $row['transferAmount'];
+            $paymentAmt = $row['paymentAmt'];
+            $savBal = $row['savingsBalance'];
+            $depAmt = $row['depositAmount'];
+            $date = $row['transactionTime'];
+            $description = $row['description'];
+
+            // This if statement checks to see if the to account is equal to morgage and the type is eqaul to Morgage
+            // if they are it will deduct the payment from the morgage balance and format it to 2 decimal places
+            // and display the html stored in maincontecnt to the user 
+            if ($toAcct == "morgage" && $type == "Morgage"){
+                
+                $mgBal = $mgBal - $paymentAmt;
+                $mgBal = sprintf("%.2f", $mgBal);
+
+                // The html displayed to the user with the data from the database
+                $mainContent .= "<tr><td>$date</td><td>$startMgBal</td><td>$description from </td><td>$fromAcct</td><td>$depAmt</td><td> $transAmt</td><td> $paymentAmt</td><td>$mgBal </td></tr>";
+            }
+
+            // This if statement checks to see if the to account is equal to DVCredit and the type is eqaul to Dark Vault Credit
+            // if they are it will deduct the payment from the dark vault credit balance and format it to 2 decimal places
+            // and display the html stored in maincontecnt to the user 
+            if ($toAcct == "DVCredit" && $type == "Dark Vault Credit"){
+                $dkvBal = $dkvBal - $paymentAmt;
+                $dkvBal = sprintf("%.2f", $dkvBal);
+                
+                // The html displayed to the user with the data from the database
+                $mainContent .= "<tr><td>$date</td><td>$startdkvBal</td><td>$description  from</td><td>$fromAcct</td><td>$depAmt</td><td> $transAmt</td><td> $paymentAmt</td><td> $dkvBal</td></tr>";
+            } 
+
+
+            // This if statement checks to see if the to account is equal to saving and the type is equal to Saving
+            // or if the from account is is equal to saving and the type is equal to Saving
+            // and will display the html stored in maincontecnt to the user 
+            if ($toAcct == "saving" && $type == "Saving" || $fromAcct == "saving" && $type == "Saving" ){
+                // The html displayed to the user with the data from the database
+                $mainContent .= "<tr><td>$date</td><td></td><td>$description to </td><td>$toAcct</td><td>$depAmt</td><td> $transAmt</td><td>$paymentAmt</td><td> $savBal</td></tr>";  
+            }
+
+             // This if statement checks to see if the to account is equal to checking and the type is equal to Checking
+            // or if the from account is is equal to checking and the type is equal to Checking
+            // and will display the html stored in maincontecnt to the user
+            if ($toAcct == "checking" && $type == "Checking" || $fromAcct == "checking" && $type == "Checking" ){
+                // The html displayed to the user with the data from the database
+                $mainContent .= "<tr><td>$date</td><td></td><td>$description to</td><td>$toAcct</td><td>$depAmt</td><td> $transAmt</td><td>$paymentAmt</td><td> $ckBal</td></tr>";   
+            } 
+        }
+    
+        // Displays the html content to the user
+        return $mainContent;
+
+    }   else{
+
+        //This displays if there are no transactions to show to the user
+        $mainContent .= "<div style=\" margin-left:25%; margin-top:10%;\"><h2>There are no transactions to show at this time</h2><br><img src=\"/img/depositMoney.jpg\" height=\"200px\" style=\"margin: 0 200px 20px 150px;\"></div>";
+        return $mainContent;
+    }
+    // This line closes the database connection
+    mysqli_close($database);     
+}
+
+
+// This function gets the morgage starting balance from the database by the user id
+function getMGStartBal($userId){
+    $mgBal= "";
+
+  // This line sets the variable $database to the connectToDatabase function to connect to the database
+    $database = connectToDataBase();
+
+   // These two lines set the query to get the information from database loanBalance table in the database
+    // by the user id number in order by transactionid in ascending order
+    $query = "SELECT * FROM loanBalance WHERE userId = $userId ORDER BY transactionId ASC";
+    $result = mysqli_query($database,$query);
+
+    // This if statment checks to see if there is any result in the database    
+    if(mysqli_num_rows($result) > 0){
+        while($row = mysqli_fetch_assoc($result)){
+            $mgBal = $row['morgageBalance'];
+
+            //This line returns the current morgage balance
+            return $mgBal;
+        }
+    }
+}
+
+
+// This function gets the dark vault credit starting balance from the database by the user id
+function getDKVStartBal($userId){
+    $dkvBal = "";
+    
+  // This line sets the variable $database to the connectToDatabase function to connect to the database
+    $database = connectToDataBase();
+
+    // These two lines set the query to get the information from database loanBalance table in the database
+    // by the user id number in order by transactionid in ascending order
+    $query = "SELECT * FROM loanBalance WHERE userId = $userId ORDER BY transactionId ASC";
+    $result = mysqli_query($database,$query);
+   
+    // This if statment checks to see if there is any result in the database    
+    if(mysqli_num_rows($result) > 0){
+        while($row = mysqli_fetch_assoc($result)){
+            $dkvBal = $row['darkVaultBalance'];
+
+             //This line returns the current dark vault credit balance
+            return $dkvBal;
+        }
+    }
+}
+
+
 ?>
 
 <script>

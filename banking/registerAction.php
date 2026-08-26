@@ -8,7 +8,7 @@
 session_start();
 // These two line include the files for the functions for this page to call to be used
 include "/var/www/html/include/functions.php";
-include "/var/www/html/banking/bankingFunctions.php";
+include_once "/var/www/html/banking/bankingFunctions.php";
 
  $mainContent = ""; 
    
@@ -41,22 +41,30 @@ include "/var/www/html/banking/bankingFunctions.php";
         die ("Connection Failed".$database2->connect_error);
     } else {
 
+        
 
         // This is a try and catch
         try{ 
 
-                // This line is the query1 to insert the data into the database1 table acctBalance
+            
+            // This line is the query1 to insert the data into the database1 table acctBalance
             $query1 = "INSERT INTO users(username, password, firstName, lastName, email, isAdmin) VALUES ('$username', '$password','$firstname', '$lastname', '$email', False)";
             mysqli_query($database1, $query1);
             $newId = mysqli_insert_id($database1); // Gets the newly generated user ID
-    
+
             // These lines set the variable names to the functions in the bankingFunctions.php page
             // to get the  morgage and darkvault cedit account starting balances to enter into the database
             $dkvBal  = getDkStartBalance($newId);
             $mgBal = getMgStartBalance($newId);  
-    
+         
+            // This sets the description, transTiem and postDate values for the morgage and dark vault credit 
+            // that are automatically created when a user registers
+            $description = "Loan Amount";
+            $transTime = date('Y-m-d');
+            $postDate = date('Y-m-d');
+            
             // This line is the query2 to insert the data into the database2 table loanBalance
-            $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct,paymentAmount,morgageBalance, darkVaultBalance) VALUES('$newId', '$toAcct', '$fromAcct','$paymentAmt','$mgBal','$dkvBal')";    
+            $query2 = "INSERT INTO loanBalance(userId, accountName,fromAcct,paymentAmount,morgageBalance, darkVaultBalance,transactionTime,postedTime,description) VALUES('$newId', '$toAcct', '$fromAcct','$paymentAmt','$mgBal','$dkvBal','$transTime','$postDate','$description')";    
             mysqli_query($database2, $query2);
 
 
@@ -72,14 +80,14 @@ include "/var/www/html/banking/bankingFunctions.php";
             }
             
         // This catch will can any exceptions and return the message to the user that an error has occured 
-        // to the webpage and display a funny gif character
+        // to the webpage and display a funny gif character that they are already on the list
         } catch (Exception $e){
             $mainContent .= "<div class=\"single-column\" role=\"presentation\">";
             $mainContent .= "<h2 id=\"message\" style=\"margin-bottom:0;\">Thanks for choosing Northern Phish &amp; Loan!</h2><p style=\"color:red; font-size:1.5rem;\"><br> An error has occured registering your account,<br> please try again!</p></div>";
             $mainContent .= "<div style=\"margin-left:26%; margin-bottom:10%;\"><img src=\"/img/registerError.gif\" width=\"500px\"; height=\"500px\";></div>"; 
         }
     }
-       // This line closes the database connection
+     // This line closes the database connection
     mysqli_close($database1);
     mysqli_close($database2);
 } 
