@@ -57,12 +57,14 @@ CREATE TABLE accounts (
 */
 CREATE TABLE transactions (
     transactionId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    userId INT,
     debitAccountId INT,
     creditAccountId INT,
     amount DECIMAL(30, 2) NOT NULL,
     transactionTime DATETIME NOT NULL,
     postedTime DATETIME,
-    description VARCHAR(256)
+    description VARCHAR(256),
+    FOREIGN KEY (userId) REFERENCES users(userId)
 );
 
 /*
@@ -92,12 +94,15 @@ CREATE TABLE acctBalance(
     paymentAmt DECIMAL(30,2) DEFAULT 0.00,
     checkingBalance DECIMAL(30, 2) DEFAULT 0.00,
     savingsBalance DECIMAL(30, 2) DEFAULT 0.00,
+    transactionTime DATE NOT NULL,
+    postedTime DATE,
+    description VARCHAR(256),
     FOREIGN KEY (userId) REFERENCES users(userId)
 );
 
 /*  Loan Account Balances table that the payments.php, and 
     loanTransactions.php pages use to store user information for the dark vault credit and the morgage
-    and payment transactions information referencing the table users userID and acctBlance transactionId
+    and payment transactions information
 */
 CREATE TABLE loanBalance(
     transactionId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -106,7 +111,10 @@ CREATE TABLE loanBalance(
     fromAcct VARCHAR(25),
     paymentAmount DECIMAL(30,2) DEFAULT 0.00,
     morgageBalance DECIMAL(30, 2) DEFAULT 0.00,
-    darkVaultBalance DECIMAL(30, 2) DEFAULT 0.00
+    darkVaultBalance DECIMAL(30, 2) DEFAULT 0.00,
+    transactionTime DATE NOT NULL,
+    postedTime DATE,
+    description VARCHAR(256)
 );
 
 /* Sample data */
@@ -119,4 +127,4 @@ INSERT INTO accounts (userId, accountType, nickname) VALUES (1, "Checking", "NOR
 INSERT INTO accounts (userId, accountType, nickname) VALUES (2, "Checking", "Sean's money");
 
 INSERT INTO transactions (debitAccountId, creditAccountId, amount, transactionTime, postedTime, description) VALUES (1, 2, 1000.0, "2025-01-01", "2025-01-01", "Cash deposit");
-;
+
