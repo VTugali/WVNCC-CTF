@@ -27,3 +27,20 @@ $mainContent .= " <button style=\"  background-color: #555; color: white; paddin
   // This line displays the chat box on the webpage
 echo generatePage($mainContent);
 ?>
+<script>
+  /*
+    This function is activated when the gray button on the chat Box support page and action page is 
+    clicked and opens the chat box
+*/ 
+function openForm() {
+  document.getElementById("myChat").style.display = "block";
+}
+/*
+    This function is activated when the red close button on the chat Box support page and action page is 
+    clicked and closes / hides the chat box
+*/ 
+function closeForm() {
+  document.getElementById("myChat").style.display = "none";
+}
+
+</script>

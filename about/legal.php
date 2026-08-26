@@ -69,4 +69,24 @@ $mainContent .= "<input type=\"button\" style=\"background-color:#c41230; paddin
 $mainContent .= "<p>&lt;/s&gt;<p>";
 $mainContent .= "</article>";
 echo generatePage(singleColumnLayout($mainContent));
+?>
 
+<script>
+/*
+    This if statement checks to see if the current url is legal.php?accepted=1, if it is:
+    the window location redirects the user to the terms_accepted.php webpage where a message is displayed
+    that url tampering was attempted and the user captures a flag for it
+*/
+const currentUrlString = window.location.href;
+    if (currentUrlString == "http://localhost/about/legal.php?accepted=1"){
+        window.location = "http://localhost/about/terms_accepted.php";
+    }
+ /*
+    This function is activated when the accept terms button on the legal.php is clicked and
+    displays an popup alert message to the user. When the alert message "ok" button is clicked 
+    the user is then redirected to the Northern Phish & Loan's registration page
+*/   
+function clicked() {
+    alert("Thank you for accepting our misleading and misguided terms! \n\nNot only are we unpredictable and unreliable, we have ALL of your money, personal data and your authorized consent to continue our non compliance in all situations as stated. \n\nThank you we appreciate not doing business with you \nat Northern Phish & Loan!\n\n You may now register for your account!"); window.location = "http://localhost/banking/register.php";
+    }
+</script>
