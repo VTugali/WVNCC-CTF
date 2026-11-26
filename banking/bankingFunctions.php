@@ -3,6 +3,10 @@
     Banking functions page
 */
 
+
+include_once "/var/www/html/include/accountcard.php";
+
+
 // This function gets the user first and last name by  user id
 function getUserName($userId){
 
@@ -793,7 +797,7 @@ function processTransfer($ss,$transferAmt,$toAcct,$fromAcct,$userId){
 }
 
 // This function checks the hash value and compares it to catch the 
-// man in the middle attack in the mobile-deposit.php page
+// man in the middle attack in the mobile-deposit.php page 
 function processMobile($ss,$userId,$mobileDepositAmt,$recAcct,$transTime,$postDate,$description){
 
     // This line sets the variable $database to the connectToDatabase function
@@ -1060,6 +1064,8 @@ function getMGStartBal($userId){
             return $mgBal;
         }
     }
+    // This line closes the database connection
+    mysqli_close($database); 
 }
 
 
@@ -1080,10 +1086,12 @@ function getDKVStartBal($userId){
         while($row = mysqli_fetch_assoc($result)){
             $dkvBal = $row['darkVaultBalance'];
 
-             //This line returns the current dark vault credit balance
+            //This line returns the current dark vault credit balance
             return $dkvBal;
         }
     }
+      // This line closes the database connection
+    mysqli_close($database); 
 }
 
 
